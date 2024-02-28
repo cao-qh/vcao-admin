@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:test": "vue-tsc && vite build --mode test",
+    "build:pro": "vue-tsc && vite build --mode production",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
@@ -17,6 +19,7 @@
   },
   "dependencies": {
     "ant-design-vue": "4.x",
+    "dayjs": "^1.11.10",
     "vue": "^3.4.15"
   },
   "devDependencies": {

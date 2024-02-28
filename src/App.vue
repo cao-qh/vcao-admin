@@ -6,9 +6,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Test from './Test.vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import dayjs from 'dayjs'
+import Test from '@/components/Test.vue'
+import 'dayjs/locale/zh-cn'
+
+dayjs.locale('zh-cn')
 const locale = ref(zhCN)
 </script>
-
-<style></style>
