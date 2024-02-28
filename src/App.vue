@@ -4,21 +4,11 @@
   </a-config-provider>
 </template>
 
-<script setup>
-import { reactive } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import Test from './Test.vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
-
-const locale = reactive({ locale: zhCN })
-
-// export default {
-//   components: {
-//     Test,
-//   },
-//   data() {
-//     return {
-//       locale: zhCN,
-//     }
-//   },
-// }
+const locale = ref(zhCN)
 </script>
+
+<style></style>
