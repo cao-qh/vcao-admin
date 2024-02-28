@@ -1,9 +1,24 @@
 <template>
-  <a-space wrap>
-    <a-button type="primary">Primary Button</a-button>
-    <a-button>Default Button</a-button>
-    <a-button type="dashed">Dashed Button</a-button>
-    <a-button type="text">Text Button</a-button>
-    <a-button type="link">Link Button</a-button>
-  </a-space>
+  <a-config-provider :locale="locale">
+    <Test />
+  </a-config-provider>
 </template>
+
+<script setup>
+import { reactive } from 'vue'
+import Test from './Test.vue'
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+
+const locale = reactive({ locale: zhCN })
+
+// export default {
+//   components: {
+//     Test,
+//   },
+//   data() {
+//     return {
+//       locale: zhCN,
+//     }
+//   },
+// }
+</script>
