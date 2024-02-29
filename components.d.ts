@@ -11,6 +11,7 @@ declare module 'vue' {
     ADatePicker: typeof import('ant-design-vue/es')['DatePicker']
     APagination: typeof import('ant-design-vue/es')['Pagination']
     ASpace: typeof import('ant-design-vue/es')['Space']
+    SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
     Test: typeof import('./src/components/Test.vue')['default']
   }
 }

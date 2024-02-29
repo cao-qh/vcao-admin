@@ -8,7 +8,7 @@
 import { ref } from 'vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
-import Test from '@/components/Test.vue'
+import Test from './Test.vue'
 import 'dayjs/locale/zh-cn'
 
 dayjs.locale('zh-cn')
