@@ -1,7 +1,7 @@
 // 引入项目中全部的全局组件
 import SvgIcom from './SvgIcon/index.vue'
 
-const allGloablComponent = {
+const allGloablComponent: { [key: string]: any } = {
   SvgIcom,
 }
 
