@@ -21,7 +21,8 @@
     "ant-design-vue": "4.x",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
-    "vue": "^3.4.15"
+    "vue": "^3.4.15",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.10",
