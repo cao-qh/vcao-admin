@@ -12,7 +12,7 @@ app.use(gloalComponent)
 // 引入模板的全局样式
 import './styles/index.scss'
 
-// 测试代码：测试假的接口能否使用
+/* // 测试代码：测试假的接口能否使用
 import axios from 'axios'
 // 登录接口
 axios({
@@ -23,6 +23,6 @@ axios({
     password: '111111',
   },
 })
-
+ */
 // 将应用挂在到挂在点上
 app.mount('#app')
