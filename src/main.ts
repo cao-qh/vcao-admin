@@ -8,6 +8,8 @@ import 'virtual:svg-icons-register'
 import gloalComponent from '@/components'
 // 引入路由
 import router from '@/router'
+// 引入仓库
+import pinia from './store'
 
 const app = createApp(App)
 
@@ -15,5 +17,7 @@ const app = createApp(App)
 app.use(gloalComponent)
 // 注册模板路由
 app.use(router)
+// 安装仓库
+app.use(pinia)
 // 将应用挂在到挂在点上
 app.mount('#app')
