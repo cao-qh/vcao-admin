@@ -43,6 +43,8 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { notification } from 'ant-design-vue'
+// 引入获取当前时间的函数
+import { getTime } from '@/utils/time'
 // 引入用户相关的小仓库
 import useUserStore from '@/store/modules/user'
 const useStore = useUserStore()
@@ -51,7 +53,8 @@ const $router = useRouter()
 // 定义变量控制按钮加载效果
 const loading = ref(false)
 // 收集账户与密码的数据
-let loginForm = reactive({ username: '', password: '' })
+const loginForm = reactive({ username: '', password: '' })
+
 const login = async () => {
   loading.value = true
   // 通知仓库发登录请求
@@ -64,8 +67,8 @@ const login = async () => {
     $router.push('/')
     // 登录成功提示信息
     notification.success({
-      message: loginForm.username,
-      description: '登录成功',
+      message: '欢迎回来',
+      description: `HI，${getTime()}好`,
     })
     // 登录成功加载效果消失
     loading.value = false
@@ -95,14 +98,17 @@ const login = async () => {
     background: url('@/assets/images/login_form.png') no-repeat;
     background-size: cover;
     padding: 40px;
+
     h1 {
       color: white;
       font-size: 40px;
     }
+
     h2 {
       color: white;
       font-size: 20px;
     }
+
     .login-btn {
       width: 100%;
     }

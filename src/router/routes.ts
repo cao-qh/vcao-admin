@@ -1,6 +1,12 @@
 // 对外暴漏配置路由(常量路由)
 export const constantRoute = [
   {
+    // 测试
+    path: '/test',
+    component: () => import('@/views/test/index.vue'),
+    name: 'test',
+  },
+  {
     // 登录
     path: '/login',
     component: () => import('@/views/login/index.vue'),
