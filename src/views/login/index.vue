@@ -69,7 +69,7 @@ const login = async () => {
     })
     // 登录成功加载效果消失
     loading.value = false
-  } catch (error) {
+  } catch (error: any) {
     // 登录失败加载效果消失
     loading.value = false
     // 登录失败提示信息
