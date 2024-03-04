@@ -10,7 +10,9 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">Header</a-layout-header>
-      <a-layout-content class="layout-content">Content</a-layout-content>
+      <a-layout-content class="layout-content">
+        <p style="height: 1000px; background-color: red">内容大苏打撒旦</p>
+      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -37,10 +39,8 @@ const collapsed = ref(false)
   }
 
   .layout-content {
-    margin: 16px;
-    padding: 24px;
-    background: #fff;
-    min-height: 280px;
+    padding: 16px;
+    overflow: auto;
   }
 }
 </style>
