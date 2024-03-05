@@ -13,7 +13,7 @@ import setting from '@/setting'
 .logo {
   height: 32px;
   line-height: 32px;
-  margin: 16px;
+  margin: 10px 16px;
   color: #fff;
   display: flex;
   justify-content: center;

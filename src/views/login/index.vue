@@ -14,7 +14,7 @@
           <a-form-item name="username">
             <a-input v-model:value="loginForm.username">
               <template #prefix>
-                <SvgIcon name="user" />
+                <UserOutlined style="color: gray" />
               </template>
             </a-input>
           </a-form-item>
@@ -24,7 +24,7 @@
               type="password"
             >
               <template #prefix>
-                <SvgIcon name="lock" />
+                <LockOutlined style="color: gray" />
               </template>
             </a-input-password>
           </a-form-item>
@@ -52,6 +52,8 @@ import { notification } from 'ant-design-vue'
 import { getTime } from '@/utils/time'
 // 引入用户相关的小仓库
 import useUserStore from '@/store/modules/user'
+// 引入用户，小锁图标
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 const useStore = useUserStore()
 // 获取路由器
 const $router = useRouter()
