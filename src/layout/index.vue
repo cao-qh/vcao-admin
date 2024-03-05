@@ -36,6 +36,7 @@ const collapsed = ref(false)
     background: #fff;
     padding: 0 10px;
     height: $base-header-height;
+    line-height: $base-header-height;
   }
 
   .layout-content {
