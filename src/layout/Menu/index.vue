@@ -17,7 +17,7 @@ import { VueElement, h, reactive } from 'vue'
 import {
   HomeOutlined,
   DesktopOutlined,
-  SettingOutlined,
+  LockOutlined,
 } from '@ant-design/icons-vue'
 import type { ItemType } from 'ant-design-vue'
 import type { MenuState } from './type'
@@ -41,7 +41,7 @@ function getItem(
 const items: ItemType[] = reactive([
   getItem('首页', 'home', () => h(HomeOutlined)),
   getItem('数据大屏', 'screen', () => h(DesktopOutlined)),
-  getItem('权限管理', 'permission', () => h(SettingOutlined), [
+  getItem('权限管理', 'permission', () => h(LockOutlined), [
     getItem('用户管理', 'user'),
     getItem('角色管理', 'role'),
     getItem('菜单管理', 'menu'),
