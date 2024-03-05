@@ -11,9 +11,9 @@ import setting from '@/setting'
 
 <style scoped lang="scss">
 .logo {
-  height: 32px;
-  line-height: 32px;
-  margin: 10px 16px;
+  height: $base-logo-height;
+  line-height: calc($base-logo-height - 20px);
+  padding: 10px 16px;
   color: #fff;
   display: flex;
   justify-content: center;

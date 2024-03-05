@@ -9,6 +9,7 @@
       width="220px"
     >
       <Logo />
+      <Menu />
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">Header</a-layout-header>
@@ -20,6 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Logo from './Logo/index.vue'
+import Menu from './Menu/index.vue'
 // 侧边栏折叠
 const collapsed = ref(false)
 </script>
