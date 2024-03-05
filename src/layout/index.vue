@@ -1,24 +1,25 @@
 <template>
   <a-layout class="layout-container">
     <a-layout-sider
+      class="layout-sider"
       v-model:collapsed="collapsed"
       collapsible
       :trigger="null"
       :collapsedWidth="0"
+      width="220px"
     >
-      <div class="logo" />
+      <Logo />
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">Header</a-layout-header>
-      <a-layout-content class="layout-content">
-        <p style="height: 1000px; background-color: red">内容大苏打撒旦</p>
-      </a-layout-content>
+      <a-layout-content class="layout-content"></a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import Logo from './Logo/index.vue'
 // 侧边栏折叠
 const collapsed = ref(false)
 </script>
@@ -26,16 +27,15 @@ const collapsed = ref(false)
 <style scoped lang="scss">
 .layout-container {
   height: 100vh;
-  .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.3);
-    margin: 16px;
+
+  .layout-sider {
+    background-color: $base-menu-color;
   }
 
   .layout-header {
     background: #fff;
     padding: 0 10px;
-    height: 50px;
+    height: $base-header-height;
   }
 
   .layout-content {
