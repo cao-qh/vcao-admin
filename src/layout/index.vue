@@ -49,7 +49,7 @@ const collapsed = ref(false)
   }
 
   .layout-content {
-    padding: 16px;
+    padding: 10px;
     overflow: auto;
   }
 }
