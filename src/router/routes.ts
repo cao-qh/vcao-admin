@@ -1,3 +1,6 @@
+// 布局组件
+import Layout from '@/layout/index.vue'
+
 // 对外暴漏配置路由(常量路由)
 export const constantRoute = [
   {
@@ -7,7 +10,7 @@ export const constantRoute = [
     name: 'test',
     meta: {
       title: '测试',
-      icon: 'HomeOutlined',
+      icon: 'ExperimentOutlined',
     },
     children: [
       // 系统管理
@@ -53,8 +56,9 @@ export const constantRoute = [
   {
     // 登录成功以后展示数据的路由
     path: '/',
-    component: () => import('@/layout/index.vue'),
+    component: Layout,
     name: 'layout',
+    redirect: '/home',
     meta: {
       title: '主页',
     },
@@ -65,6 +69,103 @@ export const constantRoute = [
         name: 'home',
         meta: {
           title: '首页',
+        },
+      },
+    ],
+  },
+  // 数据大屏
+  {
+    path: '/screen',
+    component: () => import('@/views/screen/index.vue'),
+    name: 'screen',
+    meta: {
+      title: '数据大屏',
+      icon: 'FundProjectionScreenOutlined',
+    },
+  },
+  // 权限管理
+  {
+    path: '/acl',
+    component: Layout,
+    name: 'acl',
+    meta: {
+      title: '权限管理',
+      icon: 'LockOutlined',
+    },
+    children: [
+      // 用户管理
+      {
+        path: '/user',
+        component: () => import('@/views/acl/user/index.vue'),
+        name: 'user',
+        meta: {
+          title: '用户管理',
+        },
+      },
+      // 角色管理
+      {
+        path: '/role',
+        component: () => import('@/views/acl/role/index.vue'),
+        name: 'role',
+        meta: {
+          title: '角色管理',
+        },
+      },
+      // 菜单管理
+      {
+        path: '/permission',
+        component: () => import('@/views/acl/permission/index.vue'),
+        name: 'permission',
+        meta: {
+          title: '菜单管理',
+        },
+      },
+    ],
+  },
+  // 商品管理
+  {
+    path: '/product',
+    component: Layout,
+    name: 'product',
+    meta: {
+      title: '商品管理',
+      icon: 'ShoppingOutlined',
+    },
+    children: [
+      // 品牌管理
+      {
+        path: '/tradeMark',
+        component: () => import('@/views/product/trademark/index.vue'),
+        name: 'trademark',
+        meta: {
+          title: '品牌管理',
+        },
+      },
+      // spu管理
+      {
+        path: '/spu',
+        component: () => import('@/views/product/spu/index.vue'),
+        name: 'spu',
+        meta: {
+          title: 'SPU管理',
+        },
+      },
+      // sku管理
+      {
+        path: '/sku',
+        component: () => import('@/views/product/sku/index.vue'),
+        name: 'sku',
+        meta: {
+          title: 'SKU管理',
+        },
+      },
+      // 属性管理
+      {
+        path: '/attr',
+        component: () => import('@/views/product/attr/index.vue'),
+        name: 'attr',
+        meta: {
+          title: '属性管理',
         },
       },
     ],
@@ -81,7 +182,7 @@ export const constantRoute = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/404',
-    name: 'Any',
+    name: 'any',
     meta: {
       title: '任意路由',
     },

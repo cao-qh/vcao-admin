@@ -15,9 +15,13 @@
 
 <script lang="ts" setup>
 import { VueElement, h, resolveComponent, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
+
+// 获取路由器对象
+const $router = useRouter()
 
 // 获取父组件传递过来的全部路由数组
 const props = defineProps<{ menuList: RouteRecordRaw[] }>()
@@ -100,9 +104,10 @@ const onOpenChange = (openKeys: string[]) => {
     state.openKeys = latestOpenKey ? [latestOpenKey] : []
   }
 }
+
 // 菜单点击跳转路由
-const goRoute: MenuProps['onClick'] = ({ key }) => {
-  console.log('key', key)
+const goRoute: MenuProps['onClick'] = ({ key }: { key: any }) => {
+  $router.push(key)
 }
 </script>
 

@@ -13,7 +13,9 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">Header</a-layout-header>
-      <a-layout-content class="layout-content"></a-layout-content>
+      <a-layout-content class="layout-content">
+        <Main />
+      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -22,6 +24,7 @@
 import { ref } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
+import Main from './Main/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user'
 let userStore = useUserStore()
