@@ -8,13 +8,14 @@
       :items="items"
       theme="dark"
       @openChange="onOpenChange"
+      @click="goRoute"
     ></a-menu>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { VueElement, h, resolveComponent, reactive } from 'vue'
-import type { ItemType } from 'ant-design-vue'
+import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 
@@ -82,12 +83,13 @@ const generateRootSubmenuKeys = (list: RouteRecordRaw[]) => {
   }
   return keys
 }
-
+// 菜单状态属性记录
 const state: MenuState = reactive({
   rootSubmenuKeys: generateRootSubmenuKeys(props.menuList),
   openKeys: [],
   selectedKeys: [],
 })
+// 每次一只能打开一个菜单
 const onOpenChange = (openKeys: string[]) => {
   const latestOpenKey = openKeys.find(
     (key) => state.openKeys.indexOf(key) === -1,
@@ -97,6 +99,10 @@ const onOpenChange = (openKeys: string[]) => {
   } else {
     state.openKeys = latestOpenKey ? [latestOpenKey] : []
   }
+}
+// 菜单点击跳转路由
+const goRoute: MenuProps['onClick'] = ({ key }) => {
+  console.log('key', key)
 }
 </script>
 

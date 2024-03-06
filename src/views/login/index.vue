@@ -52,8 +52,6 @@ import { notification } from 'ant-design-vue'
 import { getTime } from '@/utils/time'
 // 引入用户相关的小仓库
 import useUserStore from '@/store/modules/user'
-// 引入用户，小锁图标
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 const useStore = useUserStore()
 // 获取路由器
 const $router = useRouter()
