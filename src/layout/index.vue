@@ -9,7 +9,7 @@
       width="220px"
     >
       <Logo />
-      <Menu />
+      <Menu :menuList="userStore.menuRoutes" />
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">Header</a-layout-header>
@@ -23,7 +23,7 @@ import { ref } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
 // 获取用户相关的小仓库
-import useUserStore from '@/stores/modules/user'
+import useUserStore from '@/store/modules/user'
 let userStore = useUserStore()
 
 // 侧边栏折叠

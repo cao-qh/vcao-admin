@@ -13,15 +13,15 @@
 </template>
 
 <script lang="ts" setup>
-import { VueElement, h, reactive } from 'vue'
-import {
-  HomeOutlined,
-  DesktopOutlined,
-  LockOutlined,
-} from '@ant-design/icons-vue'
+import { VueElement, h, resolveComponent, reactive } from 'vue'
 import type { ItemType } from 'ant-design-vue'
 import type { MenuState } from './type'
+import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 
+// 获取父组件传递过来的全部路由数组
+const props = defineProps<{ menuList: RouteRecordRaw[] }>()
+
+// 生成菜单项
 function getItem(
   label: VueElement | string,
   key: string,
@@ -38,27 +38,60 @@ function getItem(
   } as ItemType
 }
 
-const items: ItemType[] = reactive([
-  getItem('首页', 'home', () => h(HomeOutlined)),
-  getItem('数据大屏', 'screen', () => h(DesktopOutlined)),
-  getItem('权限管理', 'permission', () => h(LockOutlined), [
-    getItem('用户管理', 'user'),
-    getItem('角色管理', 'role'),
-    getItem('菜单管理', 'menu'),
-  ]),
-])
+// 生成菜单列表项数组
+const generateItemList = (list: RouteRecordRaw[]) => {
+  const items: ItemType[] = []
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i]
+    const meta: RouteMeta | undefined = item.meta
+    // 标题
+    const title = (meta as RouteMeta).title
+    // 路径
+    const path = item.path
+    // 图标字符串
+    const icon = (meta as RouteMeta).icon
+    // 图标组件
+    const iconComp = icon ? () => h(resolveComponent(icon as string)) : null
+
+    // 子路由
+    const children = item.children
+    if (children) {
+      // 有子路由的情况
+      items.push(
+        getItem(title as string, path, iconComp, generateItemList(children)),
+      )
+    } else {
+      // 没有子路由的情况
+      // 生成菜单
+      items.push(getItem(title as string, path, iconComp))
+    }
+  }
+  return items
+}
+
+// 菜单项数组
+const itemList = generateItemList(props.menuList)
+const items: ItemType[] = reactive(itemList)
+
+// 生成根节点key数组
+const generateRootSubmenuKeys = (list: RouteRecordRaw[]) => {
+  const keys: string[] = []
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i]
+    keys.push(item.path)
+  }
+  return keys
+}
 
 const state: MenuState = reactive({
-  rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
+  rootSubmenuKeys: generateRootSubmenuKeys(props.menuList),
   openKeys: [],
   selectedKeys: [],
 })
 const onOpenChange = (openKeys: string[]) => {
-  console.log('openKeys :>> ', openKeys)
   const latestOpenKey = openKeys.find(
     (key) => state.openKeys.indexOf(key) === -1,
   )
-  console.log('latestOpenKey :>> ', latestOpenKey)
   if (state.rootSubmenuKeys.indexOf(latestOpenKey as string) === -1) {
     state.openKeys = openKeys
   } else {
