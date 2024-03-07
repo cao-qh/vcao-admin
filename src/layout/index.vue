@@ -2,13 +2,13 @@
   <a-layout class="layout-container">
     <a-layout-sider
       class="layout-sider"
-      v-model:collapsed="collapsed"
+      v-model:collapsed="layoutSettingStore.fold"
       collapsible
       :trigger="null"
-      :collapsedWidth="0"
       width="220px"
+      collapsedWidth="50px"
     >
-      <Logo />
+      <Logo v-show="!layoutSettingStore.fold" />
       <Menu :menuList="userStore.menuRoutes" />
     </a-layout-sider>
     <a-layout>
@@ -23,16 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
 import Navbar from './Navbar/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user'
-let userStore = useUserStore()
-
-// 侧边栏折叠
-const collapsed = ref(false)
+import useLayoutSettingStore from '@/store/modules/setting'
+const userStore = useUserStore()
+const layoutSettingStore = useLayoutSettingStore()
 </script>
 
 <style scoped lang="scss">
