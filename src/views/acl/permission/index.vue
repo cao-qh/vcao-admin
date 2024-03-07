@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>权限管理</h1>
-  </div>
+  <PageWrapper :isShowBreadcrumb="false">
+    <h1>菜单管理</h1>
+  </PageWrapper>
 </template>
 
 <script setup lang="ts"></script>

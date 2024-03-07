@@ -15,7 +15,7 @@ export const constantRoute = [
     children: [
       // 系统管理
       {
-        path: '/system',
+        path: '/test/system',
         component: () => import('@/views/test/index.vue'),
         name: 'system',
         meta: {
@@ -24,7 +24,7 @@ export const constantRoute = [
         children: [
           // 抖音抓单
           {
-            path: '/douyin',
+            path: '/test/system/douyin',
             component: () => import('@/views/test/index.vue'),
             name: 'douyin',
             meta: {
@@ -35,7 +35,7 @@ export const constantRoute = [
       },
       // 用户管理
       {
-        path: '/user',
+        path: '/test/user',
         component: () => import('@/views/test/index.vue'),
         name: 'user',
         meta: {
@@ -95,7 +95,7 @@ export const constantRoute = [
     children: [
       // 用户管理
       {
-        path: '/user',
+        path: '/acl/user',
         component: () => import('@/views/acl/user/index.vue'),
         name: 'user',
         meta: {
@@ -104,7 +104,7 @@ export const constantRoute = [
       },
       // 角色管理
       {
-        path: '/role',
+        path: '/acl/role',
         component: () => import('@/views/acl/role/index.vue'),
         name: 'role',
         meta: {
@@ -113,7 +113,7 @@ export const constantRoute = [
       },
       // 菜单管理
       {
-        path: '/permission',
+        path: '/acl/permission',
         component: () => import('@/views/acl/permission/index.vue'),
         name: 'permission',
         meta: {
@@ -134,7 +134,7 @@ export const constantRoute = [
     children: [
       // 品牌管理
       {
-        path: '/tradeMark',
+        path: '/product/tradeMark',
         component: () => import('@/views/product/trademark/index.vue'),
         name: 'trademark',
         meta: {
@@ -143,7 +143,7 @@ export const constantRoute = [
       },
       // spu管理
       {
-        path: '/spu',
+        path: '/product/spu',
         component: () => import('@/views/product/spu/index.vue'),
         name: 'spu',
         meta: {
@@ -152,7 +152,7 @@ export const constantRoute = [
       },
       // sku管理
       {
-        path: '/sku',
+        path: '/product/sku',
         component: () => import('@/views/product/sku/index.vue'),
         name: 'sku',
         meta: {
@@ -161,7 +161,7 @@ export const constantRoute = [
       },
       // 属性管理
       {
-        path: '/attr',
+        path: '/product/attr',
         component: () => import('@/views/product/attr/index.vue'),
         name: 'attr',
         meta: {

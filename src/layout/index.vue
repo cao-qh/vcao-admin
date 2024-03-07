@@ -12,9 +12,11 @@
       <Menu :menuList="userStore.menuRoutes" />
     </a-layout-sider>
     <a-layout>
-      <a-layout-header class="layout-header">Header</a-layout-header>
-      <a-layout-content class="layout-content">
-        <Main />
+      <a-layout-header class="layout-header">
+        <Navbar />
+      </a-layout-header>
+      <a-layout-content>
+        <RouterView />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -24,7 +26,7 @@
 import { ref } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
-import Main from './Main/index.vue'
+import Navbar from './Navbar/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user'
 let userStore = useUserStore()
@@ -46,11 +48,6 @@ const collapsed = ref(false)
     padding: 0 10px;
     height: $base-header-height;
     line-height: $base-header-height;
-  }
-
-  .layout-content {
-    padding: 10px;
-    overflow: auto;
   }
 }
 </style>

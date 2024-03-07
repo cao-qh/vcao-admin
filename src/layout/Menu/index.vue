@@ -15,13 +15,16 @@
 
 <script lang="ts" setup>
 import { VueElement, h, resolveComponent, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 
 // 获取路由器对象
 const $router = useRouter()
+// 获取路由对象
+const $route = useRoute()
+console.log('$route :>> ', $route.matched)
 
 // 获取父组件传递过来的全部路由数组
 const props = defineProps<{ menuList: RouteRecordRaw[] }>()
@@ -87,11 +90,15 @@ const generateRootSubmenuKeys = (list: RouteRecordRaw[]) => {
   }
   return keys
 }
+// 生成展开key数组
+const generateOpenKeys = (list: RouteRecordRaw[]) => {
+  return list.map((item) => item.path)
+}
 // 菜单状态属性记录
 const state: MenuState = reactive({
   rootSubmenuKeys: generateRootSubmenuKeys(props.menuList),
-  openKeys: [],
-  selectedKeys: [],
+  openKeys: generateOpenKeys($route.matched),
+  selectedKeys: [$route.path],
 })
 // 每次一只能打开一个菜单
 const onOpenChange = (openKeys: string[]) => {

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <PageWrapper>
     <h1>角色管理</h1>
-  </div>
+  </PageWrapper>
 </template>
 
 <script setup lang="ts"></script>
