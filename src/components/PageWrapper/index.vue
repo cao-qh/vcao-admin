@@ -5,9 +5,9 @@
         <a-breadcrumb-item>
           <a href="/">主页</a>
         </a-breadcrumb-item>
-        <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>
-        <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>
-        <a-breadcrumb-item>An Application</a-breadcrumb-item>
+        <a-breadcrumb-item v-for="route in $route.matched" :key="route.path">
+          <a :href="route.path">{{ route.meta.title }}</a>
+        </a-breadcrumb-item>
       </a-breadcrumb>
     </div>
     <div class="content">
@@ -17,13 +17,13 @@
 </template>
 
 <script setup lang="ts">
-// 定义属性
-export interface Props {
-  isShowBreadcrumb: boolean
-}
+import { useRoute } from 'vue-router'
+// 使用路由对象
+const $route = useRoute()
 
-withDefaults(defineProps<Props>(), {
-  isShowBreadcrumb: true,
+// 定义属性
+defineProps({
+  isShowBreadcrumb: { type: Boolean, default: true },
 })
 </script>
 

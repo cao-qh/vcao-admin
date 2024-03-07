@@ -24,7 +24,6 @@ import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 const $router = useRouter()
 // 获取路由对象
 const $route = useRoute()
-console.log('$route :>> ', $route.matched)
 
 // 获取父组件传递过来的全部路由数组
 const props = defineProps<{ menuList: RouteRecordRaw[] }>()
