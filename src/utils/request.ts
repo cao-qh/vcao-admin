@@ -1,6 +1,7 @@
 // 进行axios二次封装：使用请求与响应拦截器
 import axios from 'axios'
 import { message } from 'ant-design-vue'
+import useUserStore from '@/store/modules/user'
 
 // 第一步：利用axios对象的create方法，创建一个axios实例
 const request = axios.create({
@@ -10,6 +11,10 @@ const request = axios.create({
 })
 // 第二步：request实例添加请求与响应拦截器
 request.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  if (userStore.token) {
+    config.headers.token = userStore.token
+  }
   // 返回配置对象
   return config
 })

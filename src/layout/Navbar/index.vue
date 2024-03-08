@@ -20,6 +20,7 @@
           <a-button
             :icon="h(resolveComponent('FullscreenOutlined'))"
             size="small"
+            @click="fullScreen"
           />
           <a-button
             :icon="h(resolveComponent('SettingOutlined'))"
@@ -28,19 +29,13 @@
 
           <a-dropdown>
             <span>
-              admin
+              {{ userStore.username }}
               <DownOutlined />
             </span>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
-                  <a href="javascript:;">1st menu item</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;">2nd menu item</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;">3rd menu item</a>
+                  <a @click="logout">退出登录</a>
                 </a-menu-item>
               </a-menu>
             </template>
@@ -54,15 +49,50 @@
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue'
 import useLayoutSettingStore from '@/store/modules/setting'
+import useUserStore from '@/store/modules/user'
+import { useRouter, useRoute } from 'vue-router'
+
 // 获取layout配置相关的仓库
-let layoutSettingStore = useLayoutSettingStore()
+const layoutSettingStore = useLayoutSettingStore()
+// 获取用户相关的仓库
+const userStore = useUserStore()
+// 路由器对象
+const $router = useRouter()
+// 路由对象
+const $route = useRoute()
+
+// 改变菜单折叠
 const changeManuFold = () => {
   // 改变菜单折叠状态
   layoutSettingStore.fold = !layoutSettingStore.fold
 }
-
 // 刷新二级路由页面
 const reload = () => {
   layoutSettingStore.refsh = false
+}
+// 全屏
+const fullScreen = () => {
+  let full = document.fullscreenElement
+  // DOM对象的额一个属性：可以用来判断当前是不是全屏模式[全屏:true,不是全屏:false]
+  if (full) {
+    // 退出全屏
+    document.exitFullscreen()
+  } else {
+    document.documentElement.requestFullscreen()
+  }
+}
+// 退出登录
+const logout = () => {
+  // 调用登出接口
+  // 清空用户数据
+  // 跳转到登录页
+  userStore.userLogout()
+  // 跳转到登录页
+  $router.push({
+    path: '/login',
+    query: {
+      redirect: $route.path,
+    },
+  })
 }
 </script>

@@ -46,15 +46,18 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { notification } from 'ant-design-vue'
 // 引入获取当前时间的函数
 import { getTime } from '@/utils/time'
 // 引入用户相关的小仓库
 import useUserStore from '@/store/modules/user'
+
 const useStore = useUserStore()
 // 获取路由器
 const $router = useRouter()
+// 获取路由对象
+const $route = useRoute()
 // 定义变量控制按钮加载效果
 const loading = ref(false)
 // 收集账户与密码的数据
@@ -100,8 +103,9 @@ const login = async () => {
     try {
       // 保证登录成功
       await useStore.userLogin(loginForm)
+      const redirect = $route.query.redirect
       // 编程式导航跳转到展示数据首页
-      $router.push('/')
+      $router.push({ path: redirect ? String(redirect) : '/' })
       // 登录成功提示信息
       notification.success({
         message: '欢迎回来',
