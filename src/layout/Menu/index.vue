@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { VueElement, h, resolveComponent, reactive } from 'vue'
+import { VueElement, h, resolveComponent, reactive, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
@@ -115,6 +115,12 @@ const onOpenChange = (openKeys: string[]) => {
 const goRoute: MenuProps['onClick'] = ({ key }: { key: any }) => {
   $router.push(key)
 }
+
+// 监听路径变化
+watchEffect(() => {
+  state.selectedKeys = [$route.path]
+  state.openKeys = generateOpenKeys($route.matched)
+})
 </script>
 
 <style scoped lang="scss">

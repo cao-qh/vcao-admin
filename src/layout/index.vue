@@ -16,13 +16,14 @@
         <Navbar />
       </a-layout-header>
       <a-layout-content>
-        <RouterView />
+        <RouterView v-if="layoutSettingStore.refsh" />
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 
 <script setup lang="ts">
+import { watch, nextTick } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
 import Navbar from './Navbar/index.vue'
@@ -31,6 +32,16 @@ import useUserStore from '@/store/modules/user'
 import useLayoutSettingStore from '@/store/modules/setting'
 const userStore = useUserStore()
 const layoutSettingStore = useLayoutSettingStore()
+
+// 监听二级路由刷新状态改变
+watch(
+  () => layoutSettingStore.refsh,
+  () => {
+    nextTick(() => {
+      layoutSettingStore.refsh = true
+    })
+  },
+)
 </script>
 
 <style scoped lang="scss">

@@ -1,14 +1,7 @@
 <template>
   <div class="page-wrapper">
     <div class="breadcrumb" v-if="isShowBreadcrumb">
-      <a-breadcrumb>
-        <a-breadcrumb-item>
-          <a href="/">主页</a>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item v-for="route in $route.matched" :key="route.path">
-          <a :href="route.path">{{ route.meta.title }}</a>
-        </a-breadcrumb-item>
-      </a-breadcrumb>
+      <a-breadcrumb :routes="routes"></a-breadcrumb>
     </div>
     <div class="content">
       <slot></slot>
@@ -17,9 +10,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import type { Route } from './type'
+
 // 使用路由对象
 const $route = useRoute()
+const randerBreadcrumb: Route[] = $route.matched.map(
+  (item): Route => ({
+    path: item.path,
+    breadcrumbName: item.meta.title as string,
+  }),
+)
+const routes = ref<Route[]>([
+  {
+    path: '/',
+    breadcrumbName: '主页',
+  },
+  ...randerBreadcrumb,
+])
 
 // 定义属性
 defineProps({

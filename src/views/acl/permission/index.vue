@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper :isShowBreadcrumb="false">
+  <PageWrapper>
     <h1>菜单管理</h1>
   </PageWrapper>
 </template>

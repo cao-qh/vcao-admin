@@ -15,6 +15,7 @@
           <a-button
             :icon="h(resolveComponent('ReloadOutlined'))"
             size="small"
+            @click="reload"
           />
           <a-button
             :icon="h(resolveComponent('FullscreenOutlined'))"
@@ -58,5 +59,10 @@ let layoutSettingStore = useLayoutSettingStore()
 const changeManuFold = () => {
   // 改变菜单折叠状态
   layoutSettingStore.fold = !layoutSettingStore.fold
+}
+
+// 刷新二级路由页面
+const reload = () => {
+  layoutSettingStore.refsh = false
 }
 </script>

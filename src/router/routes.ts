@@ -92,6 +92,7 @@ export const constantRoute = [
       title: '权限管理',
       icon: 'LockOutlined',
     },
+    redirect: '/acl/user',
     children: [
       // 用户管理
       {
@@ -131,6 +132,7 @@ export const constantRoute = [
       title: '商品管理',
       icon: 'ShoppingOutlined',
     },
+    redirect: '/product/tradeMark',
     children: [
       // 品牌管理
       {

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <PageWrapper>
     <h1>品牌管理</h1>
-  </div>
+  </PageWrapper>
 </template>
 
 <script setup lang="ts"></script>
