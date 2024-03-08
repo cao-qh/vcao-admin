@@ -45,8 +45,9 @@ const useUserStore = defineStore('user', {
       // 如果获取用户信息成功，存储一下用户信息
       if (result.code == 200) {
         this.username = result.data.checkUser.username
+        return 'ok'
       } else {
-        alert('获取用户信息失败')
+        return Promise.reject('获取用户信息失败')
       }
     },
     // 退出登录
