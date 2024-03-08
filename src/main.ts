@@ -19,5 +19,7 @@ app.use(gloalComponent)
 app.use(router)
 // 安装仓库
 app.use(pinia)
+// 引入路由鉴权文件
+import './permisstion'
 // 将应用挂在到挂在点上
 app.mount('#app')
