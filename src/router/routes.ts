@@ -33,13 +33,13 @@ export const constantRoute = [
           },
         ],
       },
-      // 用户管理
+      // 套餐管理
       {
-        path: '/test/user',
+        path: '/test/combo',
         component: () => import('@/views/test/index.vue'),
-        name: 'user',
+        name: 'combo',
         meta: {
-          title: '用户管理',
+          title: '套餐管理',
         },
       },
     ],
