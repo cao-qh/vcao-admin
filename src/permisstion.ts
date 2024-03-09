@@ -38,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
           next()
         } catch (error) {
           // token过期了，或者用户手动修改了token
-          userStore.userLogout()
+          await userStore.userLogout()
           next({ path: '/login', query: { redirect: to.path } })
           notification.error({
             message: '登录失效',

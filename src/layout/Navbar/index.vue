@@ -82,11 +82,11 @@ const fullScreen = () => {
   }
 }
 // 退出登录
-const logout = () => {
+const logout = async () => {
   // 调用登出接口
   // 清空用户数据
   // 跳转到登录页
-  userStore.userLogout()
+  await userStore.userLogout()
   // 跳转到登录页
   $router.push({
     path: '/login',
