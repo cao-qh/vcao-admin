@@ -15,7 +15,7 @@
       <a-layout-header class="layout-header">
         <Navbar />
       </a-layout-header>
-      <a-layout-content>
+      <a-layout-content class="layout-content">
         <RouterView v-if="layoutSettingStore.refsh" />
       </a-layout-content>
     </a-layout>
@@ -57,6 +57,10 @@ watch(
     padding: 0 10px;
     height: $base-header-height;
     line-height: $base-header-height;
+  }
+
+  .layout-content {
+    height: calc(100vh - $base-header-height);
   }
 }
 </style>

@@ -4,7 +4,9 @@
       <a-breadcrumb :routes="routes"></a-breadcrumb>
     </div>
     <div class="content">
-      <slot></slot>
+      <a-card class="content-card" :bordered="false">
+        <slot></slot>
+      </a-card>
     </div>
   </div>
 </template>
@@ -38,8 +40,7 @@ defineProps({
 
 <style scoped lang="scss">
 .page-wrapper {
-  overflow: auto;
-
+  height: 100%;
   .breadcrumb {
     background-color: #fff;
     border-top: 1px solid #ecf0f1;
@@ -51,6 +52,13 @@ defineProps({
   }
   .content {
     padding: 10px;
+    height: calc(100% - 50px);
+    overflow: auto;
+
+    .content-card {
+      border-radius: 0;
+      padding: 0;
+    }
   }
 }
 </style>

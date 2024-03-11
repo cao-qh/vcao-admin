@@ -1,59 +1,96 @@
 <template>
-  <div>
-    <a-breadcrumb :routes="routes">
-      <template #itemRender="{ route, paths }">
-        <span v-if="routes.indexOf(route) === routes.length - 1">
-          {{ route.breadcrumbName }}
-        </span>
-        <router-link v-else :to="`${basePath}/${paths.join('/')}`">
-          {{ route.breadcrumbName }}
-        </router-link>
+  <a-table
+    :columns="columns"
+    :row-key="(record) => record.login.uuid"
+    :data-source="dataSource"
+    :pagination="pagination"
+    :loading="loading"
+    @change="handleTableChange"
+  >
+    <template #bodyCell="{ column, text }">
+      <template v-if="column.dataIndex === 'name'">
+        {{ text.first }} {{ text.last }}
       </template>
-    </a-breadcrumb>
-    <br />
-    {{ $route.path }}
-  </div>
+    </template>
+  </a-table>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-const $route = useRoute()
-interface Route {
-  path: string
-  breadcrumbName: string
-  children?: Array<{
-    path: string
-    breadcrumbName: string
-  }>
-}
-const basePath = '/components/breadcrumb'
-const routes = ref<Route[]>([
+import { computed } from 'vue'
+import type { TableProps } from 'ant-design-vue'
+import { usePagination } from 'vue-request'
+import axios from 'axios'
+const columns = [
   {
-    path: 'index',
-    breadcrumbName: 'home',
+    title: 'Name',
+    dataIndex: 'name',
+    sorter: true,
+    width: '20%',
   },
   {
-    path: 'first',
-    breadcrumbName: 'first',
-    children: [
-      {
-        path: '/general',
-        breadcrumbName: 'General',
-      },
-      {
-        path: '/layout',
-        breadcrumbName: 'Layout',
-      },
-      {
-        path: '/navigation',
-        breadcrumbName: 'Navigation',
-      },
+    title: 'Gender',
+    dataIndex: 'gender',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' },
     ],
+    width: '20%',
   },
   {
-    path: 'second',
-    breadcrumbName: 'second',
+    title: 'Email',
+    dataIndex: 'email',
   },
-])
-console.log('$route :>> ', $route)
+]
+
+type APIParams = {
+  results: number
+  page?: number
+  sortField?: string
+  sortOrder?: number
+  [key: string]: any
+}
+type APIResult = {
+  results: {
+    gender: 'female' | 'male'
+    name: string
+    email: string
+  }[]
+}
+
+const queryData = (params: APIParams) => {
+  return axios.get<APIResult>('https://randomuser.me/api?noinfo', { params })
+}
+
+const {
+  data: dataSource,
+  run,
+  loading,
+  current,
+  pageSize,
+} = usePagination(queryData, {
+  formatResult: (res) => res.data.results,
+  pagination: {
+    currentKey: 'page',
+    pageSizeKey: 'results',
+  },
+})
+
+const pagination = computed(() => ({
+  total: 200,
+  current: current.value,
+  pageSize: pageSize.value,
+}))
+
+const handleTableChange: TableProps['onChange'] = (
+  pag: { pageSize: number; current: number },
+  filters: any,
+  sorter: any,
+) => {
+  run({
+    results: pag.pageSize,
+    page: pag?.current,
+    sortField: sorter.field,
+    sortOrder: sorter.order,
+    ...filters,
+  })
+}
 </script>

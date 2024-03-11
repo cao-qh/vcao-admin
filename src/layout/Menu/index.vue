@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts" setup>
-import { VueElement, h, resolveComponent, reactive, watchEffect } from 'vue'
+import resolveIcon from '@/utils/resolveIcon'
+import { VueElement, reactive, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
@@ -58,7 +59,7 @@ const generateItemList = (list: RouteRecordRaw[]) => {
     // 图标字符串
     const icon = (meta as RouteMeta).icon
     // 图标组件
-    const iconComp = icon ? () => h(resolveComponent(icon as string)) : null
+    const iconComp = icon ? () => resolveIcon(icon as string) : null
 
     // 子路由
     const children = item.children

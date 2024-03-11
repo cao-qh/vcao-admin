@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 onMounted(() => {
-  console.log('window :>> ', window.location)
+  console.log('window :>> ', window.location.hash)
 })
 </script>
 
