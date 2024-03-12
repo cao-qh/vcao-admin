@@ -1,11 +1,9 @@
 <template>
   <PageWrapper>
-    <a-button
-      class="editable-add-btn"
-      style="margin-bottom: 8px"
-      :icon="resolveIcon('PlusOutlined')"
-      type="primary"
-    >
+    <a-button style="margin-bottom: 8px" type="primary">
+      <template #icon>
+        <PlusOutlined />
+      </template>
       添加品牌
     </a-button>
 
@@ -15,7 +13,6 @@
       :columns="columns"
       :bordered="true"
       :pagination="pagination"
-      :scroll="{ y: 500 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'logoUrl'">
@@ -43,9 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import resolveIcon from '@/utils/resolveIcon'
 import { ref, onMounted } from 'vue'
 import { reqHasTrademark } from '@/api/product/trademark'
+import type {
+  Records,
+  TradeMarkResponseData,
+} from '@/api/product/trademark/type'
 
 // 定义组件名
 defineOptions({ name: 'Trademark' })
@@ -53,9 +53,9 @@ defineOptions({ name: 'Trademark' })
 // 当前页面
 let pageNo = ref<number>(1)
 // 像每一页展示多少条数据
-let limit = ref<number>(10)
+let limit = ref<number>(5)
 // 数据列表
-let dataSource = ref<any>([])
+let dataSource = ref<Records>([])
 // 分页器对象
 let pagination = ref({
   total: 0,
@@ -88,7 +88,10 @@ const columns = [
 ]
 
 const getHasTrademark = async () => {
-  const res = await reqHasTrademark(pageNo.value, limit.value)
+  const res: TradeMarkResponseData = await reqHasTrademark(
+    pageNo.value,
+    limit.value,
+  )
   if (res.code == 200) {
     dataSource.value = res.data.records
     pagination.value.total = res.data.total

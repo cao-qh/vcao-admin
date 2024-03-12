@@ -56,7 +56,6 @@ defineProps({
     overflow: auto;
 
     .content-card {
-      border-radius: 0;
       padding: 0;
     }
   }
