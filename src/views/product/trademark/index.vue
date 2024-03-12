@@ -16,7 +16,29 @@
       :bordered="true"
       :pagination="pagination"
       :scroll="{ y: 500 }"
-    ></a-table>
+    >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'logoUrl'">
+          <a :href="record.logoUrl" target="_blank">
+            <img style="width: 80px; height: 80px" :src="record.logoUrl" />
+          </a>
+        </template>
+        <template v-if="column.dataIndex === 'action'">
+          <a-space>
+            <a-button type="primary">
+              <template #icon>
+                <EditOutlined />
+              </template>
+            </a-button>
+            <a-button type="primary">
+              <template #icon>
+                <DeleteOutlined />
+              </template>
+            </a-button>
+          </a-space>
+        </template>
+      </template>
+    </a-table>
   </PageWrapper>
 </template>
 
@@ -31,15 +53,14 @@ defineOptions({ name: 'Trademark' })
 // 当前页面
 let pageNo = ref<number>(1)
 // 像每一页展示多少条数据
-let limit = ref<number>(3)
+let limit = ref<number>(10)
 // 数据列表
-let dataSource = ref<any[]>([])
+let dataSource = ref<any>([])
 // 分页器对象
 let pagination = ref({
   total: 0,
   pageSizeOptions: ['10', '20', '30'],
-  current: 2,
-
+  current: 1,
   showSizeChanger: true,
 })
 
@@ -61,7 +82,7 @@ const columns = [
   },
   {
     title: '品牌操作',
-    dataIndex: 'address',
+    dataIndex: 'action',
     align: 'center',
   },
 ]
