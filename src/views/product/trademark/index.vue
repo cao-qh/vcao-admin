@@ -13,6 +13,7 @@
       :columns="columns"
       :bordered="true"
       :pagination="pagination"
+      @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'logoUrl'">
@@ -36,12 +37,15 @@
         </template>
       </template>
     </a-table>
+
+    <Add />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { reqHasTrademark } from '@/api/product/trademark'
+import Add from './modules/Add.vue'
 import type {
   Records,
   TradeMarkResponseData,
@@ -50,16 +54,13 @@ import type {
 // 定义组件名
 defineOptions({ name: 'Trademark' })
 
-// 当前页面
-let pageNo = ref<number>(1)
-// 像每一页展示多少条数据
-let limit = ref<number>(5)
 // 数据列表
 let dataSource = ref<Records>([])
 // 分页器对象
-let pagination = ref({
+let pagination = reactive({
+  pageSize: 10,
   total: 0,
-  pageSizeOptions: ['10', '20', '30'],
+  pageSizeOptions: ['5', '10', '20'],
   current: 1,
   showSizeChanger: true,
 })
@@ -89,13 +90,20 @@ const columns = [
 
 const getHasTrademark = async () => {
   const res: TradeMarkResponseData = await reqHasTrademark(
-    pageNo.value,
-    limit.value,
+    pagination.current,
+    pagination.pageSize,
   )
   if (res.code == 200) {
     dataSource.value = res.data.records
-    pagination.value.total = res.data.total
+    pagination.total = res.data.total
   }
+}
+
+// 处理表格变化
+const handleTableChange = (pag: any) => {
+  pagination.current = pag.current
+  pagination.pageSize = pag.pageSize
+  getHasTrademark()
 }
 
 onMounted(() => {

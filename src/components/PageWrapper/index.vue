@@ -51,12 +51,13 @@ defineProps({
     padding: 0 10px;
   }
   .content {
-    padding: 10px;
+    padding: 16px;
     height: calc(100% - 50px);
     overflow: auto;
 
     .content-card {
       padding: 0;
+      border-radius: 0;
     }
   }
 }
