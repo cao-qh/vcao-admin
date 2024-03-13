@@ -1,10 +1,9 @@
 <template>
   <a-modal
-    v-model:open="visible"
-    title="Create a new collection"
-    ok-text="Create"
-    cancel-text="Cancel"
-    @ok="onOk"
+    :open="visible"
+    title="添加品牌"
+    @ok="$emit('onOk')"
+    @cancel="$emit('onCancel')"
   >
     <a-form
       ref="formRef"
@@ -43,6 +42,9 @@
 import { reactive, ref, toRaw } from 'vue'
 import type { FormInstance } from 'ant-design-vue'
 
+// 定义属性
+defineProps(['visible', 'confirmLoading'])
+
 interface Values {
   title: string
   description: string
@@ -50,7 +52,7 @@ interface Values {
 }
 
 const formRef = ref<FormInstance>()
-const visible = ref(false)
+
 const formState = reactive<Values>({
   title: '',
   description: '',
@@ -72,8 +74,3 @@ const onOk = () => {
     })
 }
 </script>
-<style scoped>
-.collection-create-form_last-form-item {
-  margin-bottom: 0;
-}
-</style>

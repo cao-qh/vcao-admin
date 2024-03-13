@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <a-button style="margin-bottom: 8px" type="primary">
+    <a-button style="margin-bottom: 8px" type="primary" @click="handleAdd">
       <template #icon>
         <PlusOutlined />
       </template>
@@ -38,7 +38,13 @@
       </template>
     </a-table>
 
-    <Add />
+    <Add
+      ref="add"
+      :visible="addMudle.visible"
+      :confirmLoading="addMudle.confirmLoading"
+      @onOk="handleAddOk"
+      @onCancel="handleAddCancel"
+    />
   </PageWrapper>
 </template>
 
@@ -104,6 +110,24 @@ const handleTableChange = (pag: any) => {
   pagination.current = pag.current
   pagination.pageSize = pag.pageSize
   getHasTrademark()
+}
+
+// 添加弹窗
+const addMudle = reactive({
+  visible: false,
+  confirmLoading: false,
+})
+// 处理添加
+const handleAdd = () => {
+  addMudle.visible = true
+}
+// 处理添加完成
+const handleAddOk = () => {
+  addMudle.visible = false
+}
+// 处理添加取消
+const handleAddCancel = () => {
+  addMudle.visible = false
 }
 
 onMounted(() => {
