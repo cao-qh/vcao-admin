@@ -9,7 +9,7 @@
 
     <!-- 表格 -->
     <a-table
-      :dataSource="dataSource"
+      :data-source="dataSource"
       :columns="columns"
       :bordered="true"
       :pagination="pagination"
@@ -41,9 +41,9 @@
     <Add
       ref="add"
       :visible="addMudle.visible"
-      :confirmLoading="addMudle.confirmLoading"
-      @onOk="handleAddOk"
-      @onCancel="handleAddCancel"
+      :confirm-loading="addMudle.confirmLoading"
+      @on-ok="handleAddOk"
+      @on-cancel="handleAddCancel"
     />
   </PageWrapper>
 </template>
