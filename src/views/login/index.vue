@@ -1,46 +1,43 @@
 <template>
   <div class="login-container">
-    <a-row>
-      <a-col :xs="0" :sm="12">占位文字</a-col>
-      <a-col :xs="24" :sm="12">
-        <a-form
-          ref="formRef"
-          :model="loginForm"
-          :rules="rules"
-          class="login-form"
-        >
-          <h1>Hello</h1>
-          <h2>欢迎来到硅谷甄选</h2>
-          <a-form-item name="username">
-            <a-input v-model:value="loginForm.username">
-              <template #prefix>
-                <UserOutlined style="color: gray" />
-              </template>
-            </a-input>
-          </a-form-item>
-          <a-form-item name="password">
-            <a-input-password
-              v-model:value="loginForm.password"
-              type="password"
-            >
-              <template #prefix>
-                <LockOutlined style="color: gray" />
-              </template>
-            </a-input-password>
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              :loading="loading"
-              class="login-btn"
-              type="primary"
-              @click="login"
-            >
-              登录
-            </a-button>
-          </a-form-item>
-        </a-form>
-      </a-col>
-    </a-row>
+    <div class="main">
+      <a-form
+        ref="formRef"
+        :model="loginForm"
+        :rules="rules"
+        class="login-form"
+      >
+        <h1>天猫直播</h1>
+        <h2>部门账户</h2>
+        <a-form-item name="username">
+          <a-input v-model:value="loginForm.username">
+            <template #prefix>
+              <UserOutlined style="color: gray" />
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item name="password">
+          <a-input-password v-model:value="loginForm.password" type="password">
+            <template #prefix>
+              <LockOutlined style="color: gray" />
+            </template>
+          </a-input-password>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            :loading="loading"
+            class="login-btn"
+            type="primary"
+            @click="login"
+          >
+            登录
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </div>
+    <div class="footer">
+      <p>© All Rights Reserved</p>
+    </div>
   </div>
 </template>
 
@@ -132,30 +129,41 @@ const login = async () => {
 .login-container {
   width: 100%;
   height: 100vh;
-  background: url('@/assets/images/background.jpg') no-repeat;
-  background-size: cover;
+  background: #f2f2f2;
+  padding: 200px 0;
 
-  .login-form {
-    position: relative;
-    width: 80%;
-    top: 30vh;
-    background: url('@/assets/images/login_form.png') no-repeat;
-    background-size: cover;
-    padding: 40px;
+  .main {
+    width: 375px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 20px;
 
-    h1 {
-      color: white;
-      font-size: 40px;
+    .login-form {
+      text-align: center;
+      h1 {
+        font-size: 25px;
+        padding: 10px 0;
+      }
+      h2 {
+        font-size: 15px;
+        padding: 0 0 10px 0;
+      }
+      .login-btn {
+        width: 100%;
+      }
     }
-
-    h2 {
-      color: white;
-      font-size: 20px;
-    }
-
-    .login-btn {
-      width: 100%;
-    }
+  }
+  .footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 30px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
   }
 }
 </style>
