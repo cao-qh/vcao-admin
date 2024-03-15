@@ -5,6 +5,10 @@ import type { TradeMarkResponseData } from './type'
 enum API {
   // 获取已有的品牌接口
   TRADEMARK_URL = '/admin/product/baseTrademark/',
+  // 添加品牌
+  ADDTRADEMARK_URL = '/admin/product/baseTrademark/save',
+  // 修改品牌
+  UPDATETRADEMARK_URL = '/admin/product/baseTrademark/update',
 }
 
 export const reqHasTrademark = (page: number, limit: number) =>
