@@ -130,7 +130,7 @@ const login = async () => {
   width: 100%;
   height: 100vh;
   background: #f2f2f2;
-  padding: 200px 0;
+  padding: 10% 0;
 
   .main {
     width: 375px;
