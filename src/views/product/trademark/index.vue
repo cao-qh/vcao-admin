@@ -39,23 +39,27 @@
     </a-table>
 
     <Add
-      ref="add"
-      :visible="addMudle.visible"
-      :confirm-loading="addMudle.confirmLoading"
-      @on-ok="handleAddOk"
-      @on-cancel="handleAddCancel"
+      :visible="addModule.visible"
+      :confirm-loading="addModule.confirmLoading"
+      @ok="handleAddOk"
+      @cancel="handleAddCancel"
     />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { reqHasTrademark } from '@/api/product/trademark'
+import { message } from 'ant-design-vue'
+import {
+  reqHasTrademark,
+  reqAddOrUpdateTradeMark,
+} from '@/api/product/trademark'
 import Add from './modules/Add.vue'
 import type {
   Records,
   TradeMarkResponseData,
 } from '@/api/product/trademark/type'
+import type { FormInstance } from 'ant-design-vue'
 
 // 定义组件名
 defineOptions({ name: 'Trademark' })
@@ -113,21 +117,32 @@ const handleTableChange = (pag: any) => {
 }
 
 // 添加弹窗
-const addMudle = reactive({
+const addModule = reactive({
   visible: false,
   confirmLoading: false,
 })
 // 处理添加
 const handleAdd = () => {
-  addMudle.visible = true
+  addModule.visible = true
 }
 // 处理添加完成
-const handleAddOk = () => {
-  addMudle.visible = false
+const handleAddOk = async (formRef: FormInstance) => {
+  const values = await formRef.validate()
+  addModule.confirmLoading = true
+  const res = await reqAddOrUpdateTradeMark(values)
+  addModule.confirmLoading = false
+  if (res.code == 200) {
+    addModule.visible = false
+    getHasTrademark()
+    message.success(res.message)
+    formRef.resetFields()
+  } else {
+    message.error(res.message)
+  }
 }
 // 处理添加取消
 const handleAddCancel = () => {
-  addMudle.visible = false
+  addModule.visible = false
 }
 
 onMounted(() => {

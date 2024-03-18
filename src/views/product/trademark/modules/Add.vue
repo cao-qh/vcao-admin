@@ -1,28 +1,16 @@
 <template>
   <a-modal
-    :open="visible"
     title="添加品牌"
-    @ok="$emit('onOk')"
-    @cancel="$emit('onCancel')"
+    :open="visible"
+    :confirmLoading="confirmLoading"
+    @ok="$emit('ok', formRef)"
+    @cancel="$emit('cancel')"
   >
-    <a-form
-      :model="formState"
-      :labelCol="{
-        xs: { span: 24 },
-        sm: { span: 7 },
-      }"
-      :wrapperCol="{
-        xs: { span: 24 },
-        sm: { span: 13 },
-      }"
-    >
-      <a-form-item label="品牌名称" name="trademarkName">
-        <a-input
-          v-model:value="formState.trademarkName"
-          placeholder="请输入名称"
-        />
+    <a-form ref="formRef" :model="formState" v-bind="layout">
+      <a-form-item label="品牌名称" name="tmName">
+        <a-input v-model:value="formState.tmName" />
       </a-form-item>
-      <a-form-item label="品牌Logo" name="trademarkLogo">
+      <a-form-item label="品牌Logo" name="logoUrl">
         <a-upload
           v-model:file-list="fileList"
           name="file"
@@ -34,8 +22,8 @@
           @change="handleChange"
         >
           <img
-            v-if="formState.trademarkLogo"
-            :src="formState.trademarkLogo"
+            v-if="formState.logoUrl"
+            :src="formState.logoUrl"
             alt="avatar"
             style="width: 100px"
           />
@@ -53,6 +41,7 @@
 import { reactive, ref } from 'vue'
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
+import type { FormInstance } from 'ant-design-vue'
 
 defineOptions({ name: 'Add' })
 
@@ -68,18 +57,35 @@ defineProps({
   },
 })
 
+// 定义方法
+defineEmits(['ok', 'cancel'])
+
+// 表单布局
+const layout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 7 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 13 },
+  },
+}
+
 interface FormState {
-  trademarkName: string
-  trademarkLogo: string
+  logoUrl: string
+  tmName: string
 }
 
 const formState = reactive<FormState>({
-  trademarkName: '',
-  trademarkLogo: '',
+  logoUrl: '',
+  tmName: '',
 })
 
 const fileList = ref([])
 const loading = ref<boolean>(false)
+
+const formRef = ref<FormInstance>()
 
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   if (
@@ -106,7 +112,7 @@ const handleChange = (info: UploadChangeParam) => {
   }
   if (info.file.status === 'done') {
     loading.value = false
-    formState.trademarkLogo = info.file.response.data
+    formState.logoUrl = info.file.response.data
   }
   if (info.file.status === 'error') {
     loading.value = false
@@ -114,6 +120,7 @@ const handleChange = (info: UploadChangeParam) => {
   }
 }
 </script>
+
 <style scoped>
 .avatar-uploader > .ant-upload {
   width: 128px;
