@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     },
     // 代理跨域
     server: {
-      port: 5173,
+      port: 5174,
       proxy: {
         [env.VITE_APP_BASE_API]: {
           // 获取数据的服务器地址设置

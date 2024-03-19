@@ -7,8 +7,8 @@
         :rules="rules"
         class="login-form"
       >
-        <h1>天猫直播</h1>
-        <h2>部门账户</h2>
+        <h1>启航云仓</h1>
+        <h2>管理员账户</h2>
         <a-form-item name="username">
           <a-input v-model:value="loginForm.username">
             <template #prefix>
@@ -139,14 +139,15 @@ const login = async () => {
     padding: 20px;
 
     .login-form {
-      text-align: center;
       h1 {
         font-size: 25px;
         padding: 10px 0;
+        text-align: center;
       }
       h2 {
         font-size: 15px;
         padding: 0 0 10px 0;
+        text-align: center;
       }
       .login-btn {
         width: 100%;

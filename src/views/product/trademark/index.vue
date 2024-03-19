@@ -25,7 +25,7 @@
           <a-space>
             <a-button type="primary">
               <template #icon>
-                <EditOutlined />
+                <EditOutlined @click="handleEdit(record)" />
               </template>
             </a-button>
             <a-button type="primary">
@@ -39,10 +39,20 @@
     </a-table>
 
     <Add
+      ref="add"
       :visible="addModule.visible"
       :confirm-loading="addModule.confirmLoading"
       @ok="handleAddOk"
       @cancel="handleAddCancel"
+    />
+
+    <Edit
+      ref="edit"
+      :visible="editModule.visible"
+      :confirm-loading="editModule.confirmLoading"
+      :mdl="editModule.mdl"
+      @ok="handleEditOk"
+      @cancel="handleEditCancel"
     />
   </PageWrapper>
 </template>
@@ -55,11 +65,12 @@ import {
   reqAddOrUpdateTradeMark,
 } from '@/api/product/trademark'
 import Add from './modules/Add.vue'
+import Edit from './modules/Edit.vue'
 import type {
   Records,
   TradeMarkResponseData,
 } from '@/api/product/trademark/type'
-import type { FormInstance } from 'ant-design-vue'
+import type { TradeMark } from '@/api/product/trademark/type'
 
 // 定义组件名
 defineOptions({ name: 'Trademark' })
@@ -98,6 +109,10 @@ const columns = [
   },
 ]
 
+onMounted(() => {
+  getHasTrademark()
+})
+
 const getHasTrademark = async () => {
   const res: TradeMarkResponseData = await reqHasTrademark(
     pagination.current,
@@ -116,6 +131,7 @@ const handleTableChange = (pag: any) => {
   getHasTrademark()
 }
 
+const add = ref()
 // 添加弹窗
 const addModule = reactive({
   visible: false,
@@ -123,19 +139,20 @@ const addModule = reactive({
 })
 // 处理添加
 const handleAdd = () => {
+  add.value.form?.resetFields()
   addModule.visible = true
 }
 // 处理添加完成
-const handleAddOk = async (formRef: FormInstance) => {
-  const values = await formRef.validate()
+const handleAddOk = async () => {
+  const form = add.value.form
+  const values = await form.validate()
   addModule.confirmLoading = true
-  const res = await reqAddOrUpdateTradeMark(values)
+  const res = await reqAddOrUpdateTradeMark(values as TradeMark)
   addModule.confirmLoading = false
   if (res.code == 200) {
     addModule.visible = false
     getHasTrademark()
     message.success(res.message)
-    formRef.resetFields()
   } else {
     message.error(res.message)
   }
@@ -145,9 +162,37 @@ const handleAddCancel = () => {
   addModule.visible = false
 }
 
-onMounted(() => {
-  getHasTrademark()
+const edit = ref()
+const editModule = reactive({
+  visible: false,
+  confirmLoading: false,
+  mdl: {},
 })
+// 处理编辑
+const handleEdit = (record: TradeMark) => {
+  const { id, tmName, logoUrl } = record
+  editModule.mdl = { id, tmName, logoUrl }
+  editModule.visible = true
+}
+// 处理编辑确定
+const handleEditOk = async () => {
+  const form = edit.value.form
+  const values = await form.validate()
+  editModule.confirmLoading = true
+  const res = await reqAddOrUpdateTradeMark(values as TradeMark)
+  editModule.confirmLoading = false
+  if (res.code == 200) {
+    editModule.visible = false
+    getHasTrademark()
+    message.success(res.message)
+  } else {
+    message.error(res.message)
+  }
+}
+// 处理编辑取消
+const handleEditCancel = () => {
+  editModule.visible = false
+}
 </script>
 
 <style></style>

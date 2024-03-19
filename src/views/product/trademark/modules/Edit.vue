@@ -1,12 +1,15 @@
 <template>
   <a-modal
-    title="添加品牌"
+    title="修改品牌"
     :open="visible"
     :confirmLoading="confirmLoading"
     @ok="$emit('ok')"
     @cancel="$emit('cancel')"
   >
     <a-form ref="form" :model="formState" v-bind="layout">
+      <a-form-item label="ID" name="id">
+        <a-input v-model:value="formState.id" disabled />
+      </a-form-item>
       <a-form-item label="品牌名称" name="tmName">
         <a-input v-model:value="formState.tmName" />
       </a-form-item>
@@ -38,14 +41,14 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
-defineOptions({ name: 'Add' })
+defineOptions({ name: 'Edit' })
 // 定义属性
-defineProps({
+const props = defineProps({
   visible: {
     type: Boolean,
     default: false,
@@ -53,6 +56,10 @@ defineProps({
   confirmLoading: {
     type: Boolean,
     default: false,
+  },
+  mdl: {
+    type: Object,
+    default: () => {},
   },
 })
 // 定义方法
@@ -73,14 +80,25 @@ const layout = {
 }
 
 interface FormState {
+  id: number
   logoUrl: string
   tmName: string
 }
 
 const formState = reactive<FormState>({
+  id: -1,
   logoUrl: '',
   tmName: '',
 })
+
+watch(
+  () => props.mdl,
+  (val) => {
+    if (val) {
+      Object.assign(formState, val)
+    }
+  },
+)
 
 const fileList = ref([])
 const loading = ref<boolean>(false)
