@@ -113,9 +113,9 @@ onMounted(() => {
   getHasTrademark()
 })
 
-const getHasTrademark = async () => {
+const getHasTrademark = async (reset = false) => {
   const res: TradeMarkResponseData = await reqHasTrademark(
-    pagination.current,
+    reset ? 1 : pagination.current,
     pagination.pageSize,
   )
   if (res.code == 200) {
@@ -145,16 +145,20 @@ const handleAdd = () => {
 // 处理添加完成
 const handleAddOk = async () => {
   const form = add.value.form
-  const values = await form.validate()
-  addModule.confirmLoading = true
-  const res = await reqAddOrUpdateTradeMark(values as TradeMark)
-  addModule.confirmLoading = false
-  if (res.code == 200) {
-    addModule.visible = false
-    getHasTrademark()
-    message.success(res.message)
-  } else {
-    message.error(res.message)
+  try {
+    const values = await form.validate()
+    addModule.confirmLoading = true
+    const res = await reqAddOrUpdateTradeMark(values as TradeMark)
+    addModule.confirmLoading = false
+    if (res.code == 200) {
+      addModule.visible = false
+      getHasTrademark()
+      message.success(res.message)
+    } else {
+      message.error(res.message)
+    }
+  } catch (error) {
+    console.log('error :>> ', error)
   }
 }
 // 处理添加取消

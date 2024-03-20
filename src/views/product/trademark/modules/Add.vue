@@ -6,7 +6,7 @@
     @ok="$emit('ok')"
     @cancel="$emit('cancel')"
   >
-    <a-form ref="form" :model="formState" v-bind="layout">
+    <a-form ref="form" :model="formState" :rules="rules" v-bind="layout">
       <a-form-item label="品牌名称" name="tmName">
         <a-input v-model:value="formState.tmName" />
       </a-form-item>
@@ -81,6 +81,11 @@ const formState = reactive<FormState>({
   logoUrl: '',
   tmName: '',
 })
+
+const rules = {
+  tmName: [{ required: true, message: '请输入品牌名称' }],
+  logoUrl: [{ required: true, message: '请上传品牌Logo' }],
+}
 
 const fileList = ref([])
 const loading = ref<boolean>(false)
