@@ -9,14 +9,16 @@ enum API {
   ADDTRADEMARK_URL = '/admin/product/baseTrademark/save',
   // 修改品牌
   UPDATETRADEMARK_URL = '/admin/product/baseTrademark/update',
+  // 删除已有品牌
+  DELETE_URL = '/admin/product/baseTrademark/remove/',
 }
 
 // 获取品牌列表
-export const reqHasTrademark = (page: number, limit: number) =>
-  request.get<any, TradeMarkResponseData>(
+export const reqHasTrademark = (page: number, limit: number) => {
+  return request.get<any, TradeMarkResponseData>(
     API.TRADEMARK_URL + `${page}/${limit}`,
   )
-
+}
 // 添加玉修改已有品牌接口方法
 export const reqAddOrUpdateTradeMark = (data: TradeMark) => {
   // 修改已有品牌的数据
@@ -26,4 +28,8 @@ export const reqAddOrUpdateTradeMark = (data: TradeMark) => {
     // 新增品牌
     return request.post<any, any>(API.ADDTRADEMARK_URL, data)
   }
+}
+// 删除某一个已有品牌的数据
+export const reqDeleteTradeMark = (id: number) => {
+  return request.delete<any, any>(API.DELETE_URL + id)
 }

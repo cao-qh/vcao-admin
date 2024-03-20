@@ -23,16 +23,26 @@
         </template>
         <template v-if="column.dataIndex === 'action'">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="handleEdit(record)">
               <template #icon>
-                <EditOutlined @click="handleEdit(record)" />
+                <EditOutlined />
               </template>
             </a-button>
-            <a-button type="primary">
+            <a-popconfirm
+              :title="`确定删除${record.tmName}吗？`"
+              ok-text="是"
+              cancel-text="否"
+              @confirm="handleDelete(record.id)"
+            >
               <template #icon>
-                <DeleteOutlined />
+                <question-circle-outlined style="color: red" />
               </template>
-            </a-button>
+              <a-button type="primary">
+                <template #icon>
+                  <DeleteOutlined />
+                </template>
+              </a-button>
+            </a-popconfirm>
           </a-space>
         </template>
       </template>
@@ -63,6 +73,7 @@ import { message } from 'ant-design-vue'
 import {
   reqHasTrademark,
   reqAddOrUpdateTradeMark,
+  reqDeleteTradeMark,
 } from '@/api/product/trademark'
 import Add from './modules/Add.vue'
 import Edit from './modules/Edit.vue'
@@ -196,6 +207,19 @@ const handleEditOk = async () => {
 // 处理编辑取消
 const handleEditCancel = () => {
   editModule.visible = false
+}
+
+// 处理删除
+const handleDelete = async (id: number) => {
+  const res = await reqDeleteTradeMark(id)
+  if (res.code == 200) {
+    message.success(res.message)
+    // 重新获取数据
+    getHasTrademark()
+    return true
+  } else {
+    message.error(res.message)
+  }
 }
 </script>
 
