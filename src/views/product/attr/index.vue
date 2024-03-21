@@ -4,24 +4,20 @@
       <a-row :gutter="24">
         <a-col :span="8">
           <a-form-item label="一级分类">
-            <a-select v-model:value="formState.region">
-              <a-select-option value="jack">Jack</a-select-option>
-            </a-select>
+            <a-select
+              show-search
+              :filterOption="filterOption"
+              v-model:value="formState.c1"
+              :fieldNames="{ label: 'name', value: 'id' }"
+              :options="c1Arr"
+            ></a-select>
           </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item label="二级分类">
-            <a-select v-model:value="formState.region">
-              <a-select-option value="jack">Jack</a-select-option>
-            </a-select>
-          </a-form-item>
+          <a-form-item label="二级分类"></a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item label="三级分类">
-            <a-select v-model:value="formState.region">
-              <a-select-option value="jack">Jack</a-select-option>
-            </a-select>
-          </a-form-item>
+          <a-form-item label="三级分类"></a-form-item>
         </a-col>
       </a-row>
     </a-form>
@@ -38,7 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+import { reqC1 } from '@/api/product/attr/index'
+import type { SelectProps } from 'ant-design-vue'
 
 const columns = [
   {
@@ -64,6 +62,19 @@ const columns = [
 ]
 
 const formState = reactive({})
+
+const c1Arr = ref<SelectProps['options']>([])
+
+onMounted(async () => {
+  const res = await reqC1()
+  if (res.code == 200) {
+    c1Arr.value = res.data
+  }
+})
+
+const filterOption = (input: string, option: any) => {
+  return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0
+}
 </script>
 
 <style></style>

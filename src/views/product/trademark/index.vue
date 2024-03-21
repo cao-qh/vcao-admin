@@ -222,5 +222,3 @@ const handleDelete = async (id: number) => {
   }
 }
 </script>
-
-<style></style>
