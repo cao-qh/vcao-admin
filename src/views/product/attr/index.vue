@@ -55,14 +55,15 @@
       添加属性
     </a-button>
 
-    <a-table :columns="columns"></a-table>
+    <a-table :columns="columns" :data-source="attrArr"></a-table>
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { reqC1, reqC2, reqC3 } from '@/api/product/attr/index'
+import { reqC1, reqC2, reqC3, reqAttr } from '@/api/product/attr/index'
 import type { SelectProps } from 'ant-design-vue'
+import type { Attr, AttrResponseData } from '@/api/product/attr/type'
 
 const columns = [
   {
@@ -72,7 +73,7 @@ const columns = [
   },
   {
     title: '属性名称',
-    dataIndex: 'id',
+    dataIndex: 'attrName',
     align: 'center',
   },
   {
@@ -98,6 +99,8 @@ const fieldNames = { label: 'name', value: 'id' }
 const c1Arr = ref<SelectProps['options']>([])
 const c2Arr = ref<SelectProps['options']>([])
 const c3Arr = ref<SelectProps['options']>([])
+
+let attrArr = ref<Attr[]>([])
 
 onMounted(async () => {
   const res = await reqC1()
@@ -127,8 +130,16 @@ const handleC2Change = async (value: number) => {
     c3Arr.value = res.data
   }
 }
-const handleC3Change = async () => {
-  console.log('formSate :>> ', formState)
+const handleC3Change = async (value: number) => {
+  if (!value) return
+  const res: AttrResponseData = await reqAttr(
+    formState.c1 as number,
+    formState.c2 as number,
+    formState.c3 as number,
+  )
+  if (res.code == 200) {
+    attrArr.value = res.data
+  }
 }
 </script>
 
