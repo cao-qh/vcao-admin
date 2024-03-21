@@ -29,6 +29,7 @@ declare module 'vue' {
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASpace: typeof import('ant-design-vue/es')['Space']
     ATable: typeof import('ant-design-vue/es')['Table']
+    ATag: typeof import('ant-design-vue/es')['Tag']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     PageWrapper: typeof import('./src/components/PageWrapper/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

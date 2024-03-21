@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <a-form :model="formState">
+    <a-form :model="formState" :disabled="isAddOrEdit">
       <a-row :gutter="24">
         <a-col :span="8">
           <a-form-item label="一级分类">
@@ -44,18 +44,74 @@
       </a-row>
     </a-form>
 
-    <a-button
-      style="margin-bottom: 8px"
-      type="primary"
-      :disabled="!formState.c3"
-    >
-      <template #icon>
-        <PlusOutlined />
-      </template>
-      添加属性
-    </a-button>
+    <template v-if="!isAddOrEdit">
+      <a-button
+        style="margin-bottom: 8px"
+        type="primary"
+        :disabled="!formState.c3"
+        @click="isAddOrEdit = true"
+      >
+        <template #icon>
+          <PlusOutlined />
+        </template>
+        添加属性
+      </a-button>
 
-    <a-table :columns="columns" :data-source="attrArr"></a-table>
+      <a-table :columns="columns" :data-source="attrArr">
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex === 'attrValueList'">
+            <a-tag v-for="item in record.attrValueList" :key="item.id">
+              {{ item.valueName }}
+            </a-tag>
+          </template>
+          <template v-if="column.dataIndex === 'action'">
+            <a-space>
+              <a-button type="primary" @click="handleEdit(record)">
+                <template #icon>
+                  <EditOutlined />
+                </template>
+              </a-button>
+              <a-popconfirm
+                title="是否确认删除?"
+                ok-text="确认"
+                cancel-text="取消"
+                @confirm="handleDelete(record)"
+              >
+                <a-button type="primary" danger>
+                  <template #icon>
+                    <DeleteOutlined />
+                  </template>
+                </a-button>
+              </a-popconfirm>
+            </a-space>
+          </template>
+        </template>
+      </a-table>
+    </template>
+
+    <template v-else>
+      <a-space direction="vertical" style="width: 100%">
+        <a-form layout="inline">
+          <a-form-item label="属性名称">
+            <a-input placeholder="请输入属性名称" />
+          </a-form-item>
+        </a-form>
+        <a-space>
+          <a-button type="primary" @click="isAddOrEdit = true">
+            <template #icon>
+              <PlusOutlined />
+            </template>
+            添加属性
+          </a-button>
+          <a-button @click="isAddOrEdit = false">取消</a-button>
+        </a-space>
+        <a-table :columns="attrValueColumns"></a-table>
+        <a-space>
+          <a-button type="primary">保存</a-button>
+          <a-button @click="isAddOrEdit = false">取消</a-button>
+        </a-space>
+      </a-space>
+    </template>
   </PageWrapper>
 </template>
 
@@ -78,13 +134,26 @@ const columns = [
   },
   {
     title: '属性值名称',
-    dataIndex: 'id',
+    dataIndex: 'attrValueList',
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
     align: 'center',
+  },
+]
+const attrValueColumns = [
+  {
+    title: '序号',
+    dataIndex: 'id',
+  },
+  {
+    title: '属性值名称',
+    dataIndex: 'id',
   },
   {
     title: '操作',
     dataIndex: 'id',
-    align: 'center',
   },
 ]
 
@@ -100,7 +169,8 @@ const c1Arr = ref<SelectProps['options']>([])
 const c2Arr = ref<SelectProps['options']>([])
 const c3Arr = ref<SelectProps['options']>([])
 
-let attrArr = ref<Attr[]>([])
+const attrArr = ref<Attr[]>([])
+const isAddOrEdit = ref<boolean>(false)
 
 onMounted(async () => {
   const res = await reqC1()
@@ -140,6 +210,9 @@ const handleC3Change = async (value: number) => {
   if (res.code == 200) {
     attrArr.value = res.data
   }
+}
+const handleEdit = (record: Attr) => {
+  isAddOrEdit.value = true
 }
 </script>
 
