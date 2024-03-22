@@ -93,11 +93,18 @@
       <a-space direction="vertical" style="width: 100%">
         <a-form layout="inline">
           <a-form-item label="属性名称">
-            <a-input placeholder="请输入属性名称" />
+            <a-input
+              v-model:value="attrParams.attrName"
+              placeholder="请输入属性名称"
+            />
           </a-form-item>
         </a-form>
         <a-space>
-          <a-button type="primary" @click="isAddOrEdit = true">
+          <a-button
+            type="primary"
+            :disabled="!attrParams.attrName"
+            @click="addAttrValue"
+          >
             <template #icon>
               <PlusOutlined />
             </template>
@@ -105,7 +112,20 @@
           </a-button>
           <a-button @click="isAddOrEdit = false">取消</a-button>
         </a-space>
-        <a-table :columns="attrValueColumns"></a-table>
+        <a-table
+          :columns="attrValueColumns"
+          :data-source="attrParams.attrValueList"
+          bordered
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.dataIndex === 'id'">
+              <span>{{ record.id || index + 1 }}</span>
+            </template>
+            <template v-if="column.dataIndex === 'attrName'">
+              <a-input placeholder="请输入属性名称" />
+            </template>
+          </template>
+        </a-table>
         <a-space>
           <a-button type="primary">保存</a-button>
           <a-button @click="isAddOrEdit = false">取消</a-button>
@@ -149,11 +169,11 @@ const attrValueColumns = [
   },
   {
     title: '属性值名称',
-    dataIndex: 'id',
+    dataIndex: 'attrName',
   },
   {
     title: '操作',
-    dataIndex: 'id',
+    dataIndex: 'action',
   },
 ]
 
@@ -171,6 +191,12 @@ const c3Arr = ref<SelectProps['options']>([])
 
 const attrArr = ref<Attr[]>([])
 const isAddOrEdit = ref<boolean>(false)
+const attrParams = reactive<Attr>({
+  attrName: '',
+  attrValueList: [],
+  categoryId: -1,
+  categoryLevel: 3,
+})
 
 onMounted(async () => {
   const res = await reqC1()
@@ -213,6 +239,11 @@ const handleC3Change = async (value: number) => {
 }
 const handleEdit = (record: Attr) => {
   isAddOrEdit.value = true
+}
+const addAttrValue = () => {
+  attrParams.attrValueList.push({
+    valueName: '',
+  })
 }
 </script>
 

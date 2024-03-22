@@ -17,13 +17,13 @@ export interface CategoryResponseData extends ResponseData {
 }
 
 export interface AttrValue {
-  id: number
+  id?: number
   valueName: string
-  attrId: number
+  attrId?: number
 }
 
 export interface Attr {
-  id: number
+  id?: number
   attrName: string
   categoryId: number
   categoryLevel: number
