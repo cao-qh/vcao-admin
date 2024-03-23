@@ -49,7 +49,7 @@
         style="margin-bottom: 8px"
         type="primary"
         :disabled="!formState.c3"
-        @click="isAddOrEdit = true"
+        @click="handleAddAttr"
       >
         <template #icon>
           <PlusOutlined />
@@ -122,12 +122,15 @@
               <span>{{ record.id || index + 1 }}</span>
             </template>
             <template v-if="column.dataIndex === 'attrName'">
-              <a-input placeholder="请输入属性名称" />
+              <a-input
+                v-model:value="attrParams.attrValueList[index].valueName"
+                placeholder="请输入属性名称"
+              />
             </template>
           </template>
         </a-table>
         <a-space>
-          <a-button type="primary">保存</a-button>
+          <a-button type="primary" @click="handleSave">保存</a-button>
           <a-button @click="isAddOrEdit = false">取消</a-button>
         </a-space>
       </a-space>
@@ -137,9 +140,18 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { reqC1, reqC2, reqC3, reqAttr } from '@/api/product/attr/index'
+import {
+  reqC1,
+  reqC2,
+  reqC3,
+  reqAttr,
+  reqAddOrUpdateAttr,
+} from '@/api/product/attr/index'
 import type { SelectProps } from 'ant-design-vue'
 import type { Attr, AttrResponseData } from '@/api/product/attr/type'
+import { message } from 'ant-design-vue'
+
+defineOptions({ name: 'Attr' })
 
 const columns = [
   {
@@ -226,8 +238,8 @@ const handleC2Change = async (value: number) => {
     c3Arr.value = res.data
   }
 }
-const handleC3Change = async (value: number) => {
-  if (!value) return
+
+const getAttr = async () => {
   const res: AttrResponseData = await reqAttr(
     formState.c1 as number,
     formState.c2 as number,
@@ -237,13 +249,41 @@ const handleC3Change = async (value: number) => {
     attrArr.value = res.data
   }
 }
+
+const handleC3Change = async (value: number) => {
+  if (!value) return
+  getAttr()
+}
 const handleEdit = (record: Attr) => {
   isAddOrEdit.value = true
 }
+
+const handleAddAttr = () => {
+  isAddOrEdit.value = true
+  attrParams.categoryId = formState.c3 as number
+  Object.assign(attrParams, {
+    attrName: '',
+    attrValueList: [],
+    categoryId: -1,
+    categoryLevel: 3,
+  })
+}
+
 const addAttrValue = () => {
   attrParams.attrValueList.push({
     valueName: '',
   })
+}
+const handleSave = async () => {
+  // 发请求
+  const res = await reqAddOrUpdateAttr(attrParams)
+  if (res.code == 200) {
+    isAddOrEdit.value = false
+    message.success(res.message)
+    getAttr()
+  } else {
+    message.error(res.message)
+  }
 }
 </script>
 
