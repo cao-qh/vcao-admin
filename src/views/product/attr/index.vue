@@ -123,9 +123,15 @@
             </template>
             <template v-if="column.dataIndex === 'attrName'">
               <a-input
-                v-model:value="attrParams.attrValueList[index].valueName"
+                v-if="record.flag"
+                v-model:value="record.valueName"
                 placeholder="请输入属性名称"
+                size="small"
+                @blur="toLook(record, index)"
               />
+              <div v-else @click="record.flag = true">
+                {{ record.valueName }}
+              </div>
             </template>
           </template>
         </a-table>
@@ -148,7 +154,7 @@ import {
   reqAddOrUpdateAttr,
 } from '@/api/product/attr/index'
 import type { SelectProps } from 'ant-design-vue'
-import type { Attr, AttrResponseData } from '@/api/product/attr/type'
+import type { Attr, AttrValue, AttrResponseData } from '@/api/product/attr/type'
 import { message } from 'ant-design-vue'
 
 defineOptions({ name: 'Attr' })
@@ -178,6 +184,7 @@ const attrValueColumns = [
   {
     title: '序号',
     dataIndex: 'id',
+    width: '10%',
   },
   {
     title: '属性值名称',
@@ -272,6 +279,7 @@ const handleAddAttr = () => {
 const addAttrValue = () => {
   attrParams.attrValueList.push({
     valueName: '',
+    flag: true,
   })
 }
 const handleSave = async () => {
@@ -284,6 +292,21 @@ const handleSave = async () => {
   } else {
     message.error(res.message)
   }
+}
+const toLook = (record: AttrValue, index: number) => {
+  if (record.valueName.trim() == '') {
+    attrParams.attrValueList.splice(index, 1)
+    message.error('属性值不能为空')
+    return
+  }
+  const repeat = attrParams.attrValueList.find((item) => {
+    if (item !== record) {
+      return item.valueName == record.valueName
+    }
+  })
+  console.log('repeat :>> ', repeat)
+
+  record.flag = false
 }
 </script>
 
