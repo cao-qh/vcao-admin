@@ -124,19 +124,38 @@
             <template v-if="column.dataIndex === 'attrName'">
               <a-input
                 v-if="record.flag"
+                :ref="(el: any) => (inputArr[index] = el)"
                 v-model:value="record.valueName"
                 placeholder="请输入属性名称"
                 size="small"
                 @blur="toLook(record, index)"
               />
-              <div v-else @click="record.flag = true">
+              <div v-else @click="toEdit(record, index)">
                 {{ record.valueName }}
               </div>
+            </template>
+            <template v-if="column.dataIndex === 'action'">
+              <a-button
+                type="primary"
+                danger
+                size="small"
+                @click="attrParams.attrValueList.splice(index, 1)"
+              >
+                <template #icon>
+                  <DeleteOutlined />
+                </template>
+              </a-button>
             </template>
           </template>
         </a-table>
         <a-space>
-          <a-button type="primary" @click="handleSave">保存</a-button>
+          <a-button
+            type="primary"
+            @click="handleSave"
+            :disabled="attrParams.attrValueList.length === 0"
+          >
+            保存
+          </a-button>
           <a-button @click="isAddOrEdit = false">取消</a-button>
         </a-space>
       </a-space>
@@ -145,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, nextTick } from 'vue'
 import {
   reqC1,
   reqC2,
@@ -216,6 +235,7 @@ const attrParams = reactive<Attr>({
   categoryId: -1,
   categoryLevel: 3,
 })
+const inputArr = ref<any[]>([])
 
 onMounted(async () => {
   const res = await reqC1()
@@ -281,6 +301,9 @@ const addAttrValue = () => {
     valueName: '',
     flag: true,
   })
+  nextTick(() => {
+    inputArr.value[attrParams.attrValueList.length - 1].focus()
+  })
 }
 const handleSave = async () => {
   // 发请求
@@ -304,9 +327,19 @@ const toLook = (record: AttrValue, index: number) => {
       return item.valueName == record.valueName
     }
   })
-  console.log('repeat :>> ', repeat)
+  if (repeat) {
+    attrParams.attrValueList.splice(index, 1)
+    message.error('属性值不能重复')
+    return
+  }
 
   record.flag = false
+}
+const toEdit = (record: AttrValue, index: number) => {
+  record.flag = true
+  nextTick(() => {
+    inputArr.value[index].focus()
+  })
 }
 </script>
 
