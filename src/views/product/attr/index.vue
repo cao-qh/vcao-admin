@@ -283,17 +283,18 @@ const handleC3Change = async (value: number) => {
 }
 const handleEdit = (record: Attr) => {
   isAddOrEdit.value = true
+  Object.assign(attrParams, JSON.parse(JSON.stringify(record)))
 }
 
 const handleAddAttr = () => {
-  isAddOrEdit.value = true
-  attrParams.categoryId = formState.c3 as number
   Object.assign(attrParams, {
     attrName: '',
     attrValueList: [],
     categoryId: -1,
     categoryLevel: 3,
   })
+  isAddOrEdit.value = true
+  attrParams.categoryId = formState.c3 as number
 }
 
 const addAttrValue = () => {
