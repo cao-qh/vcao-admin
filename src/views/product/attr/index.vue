@@ -57,7 +57,7 @@
         添加属性
       </a-button>
 
-      <a-table :columns="columns" :data-source="attrArr">
+      <a-table :columns="columns" :data-source="attrArr" bordered>
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'attrValueList'">
             <a-tag v-for="item in record.attrValueList" :key="item.id">
@@ -75,7 +75,7 @@
                 title="是否确认删除?"
                 ok-text="确认"
                 cancel-text="取消"
-                @confirm="handleDelete(record)"
+                @confirm="handleDelete(record.id)"
               >
                 <a-button type="primary" danger>
                   <template #icon>
@@ -171,6 +171,7 @@ import {
   reqC3,
   reqAttr,
   reqAddOrUpdateAttr,
+  reqRemoveAttr,
 } from '@/api/product/attr/index'
 import type { SelectProps } from 'ant-design-vue'
 import type { Attr, AttrValue, AttrResponseData } from '@/api/product/attr/type'
@@ -341,6 +342,16 @@ const toEdit = (record: AttrValue, index: number) => {
   nextTick(() => {
     inputArr.value[index].focus()
   })
+}
+const handleDelete = async (id: number) => {
+  const res = await reqRemoveAttr(id)
+  if (res.code == 200) {
+    message.success('删除成功')
+    getAttr()
+  } else {
+    message.error('删除失败')
+  }
+  return true
 }
 </script>
 
