@@ -1,54 +1,12 @@
 <template>
   <PageWrapper>
-    <a-form :model="formState" :disabled="isAddOrEdit">
-      <a-row :gutter="24">
-        <a-col :span="8">
-          <a-form-item label="一级分类">
-            <a-select
-              allow-clear
-              show-search
-              :filterOption="filterOption"
-              v-model:value="formState.c1"
-              :fieldNames="fieldNames"
-              :options="c1Arr"
-              @change="handleC1Change"
-            ></a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="8">
-          <a-form-item label="二级分类">
-            <a-select
-              allow-clear
-              show-search
-              :filterOption="filterOption"
-              v-model:value="formState.c2"
-              :fieldNames="fieldNames"
-              :options="c2Arr"
-              @change="handleC2Change"
-            ></a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="8">
-          <a-form-item label="三级分类">
-            <a-select
-              allow-clear
-              show-search
-              :filterOption="filterOption"
-              v-model:value="formState.c3"
-              :fieldNames="fieldNames"
-              :options="c3Arr"
-              @change="handleC3Change"
-            ></a-select>
-          </a-form-item>
-        </a-col>
-      </a-row>
-    </a-form>
+    <Categoty :disabled="isAddOrEdit" @c3Change="handleC3Change" />
 
     <template v-if="!isAddOrEdit">
       <a-button
         style="margin-bottom: 8px"
         type="primary"
-        :disabled="!formState.c3"
+        :disabled="!categoryLevel.c3"
         @click="handleAddAttr"
       >
         <template #icon>
@@ -164,18 +122,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, nextTick } from 'vue'
+import { reactive, ref, nextTick } from 'vue'
 import {
-  reqC1,
-  reqC2,
-  reqC3,
   reqAttr,
   reqAddOrUpdateAttr,
   reqRemoveAttr,
 } from '@/api/product/attr/index'
-import type { SelectProps } from 'ant-design-vue'
+
 import type { Attr, AttrValue, AttrResponseData } from '@/api/product/attr/type'
 import { message } from 'ant-design-vue'
+import Categoty from '@/components/Category/index.vue'
 
 defineOptions({ name: 'Attr' })
 
@@ -216,18 +172,11 @@ const attrValueColumns = [
   },
 ]
 
-interface FormState {
+const categoryLevel = reactive<{
   c1?: number
   c2?: number
   c3?: number
-}
-const formState = reactive<FormState>({})
-
-const fieldNames = { label: 'name', value: 'id' }
-const c1Arr = ref<SelectProps['options']>([])
-const c2Arr = ref<SelectProps['options']>([])
-const c3Arr = ref<SelectProps['options']>([])
-
+}>({})
 const attrArr = ref<Attr[]>([])
 const isAddOrEdit = ref<boolean>(false)
 const attrParams = reactive<Attr>({
@@ -238,50 +187,22 @@ const attrParams = reactive<Attr>({
 })
 const inputArr = ref<any[]>([])
 
-onMounted(async () => {
-  const res = await reqC1()
-  if (res.code == 200) {
-    c1Arr.value = res.data
-  }
-})
-
-const filterOption = (input: string, option: any) => {
-  return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0
-}
-
-const handleC1Change = async (value: number) => {
-  formState.c2 = undefined
-  formState.c3 = undefined
-  c3Arr.value = []
-  const res = await reqC2(value)
-  if (res.code == 200) {
-    c2Arr.value = res.data
-  }
-}
-const handleC2Change = async (value: number) => {
-  formState.c3 = undefined
-  c3Arr.value = []
-  const res = await reqC3(value)
-  if (res.code == 200) {
-    c3Arr.value = res.data
-  }
+const handleC3Change = (obj: any) => {
+  Object.assign(categoryLevel, obj)
+  getAttr()
 }
 
 const getAttr = async () => {
   const res: AttrResponseData = await reqAttr(
-    formState.c1 as number,
-    formState.c2 as number,
-    formState.c3 as number,
+    categoryLevel.c1 as number,
+    categoryLevel.c2 as number,
+    categoryLevel.c3 as number,
   )
   if (res.code == 200) {
     attrArr.value = res.data
   }
 }
 
-const handleC3Change = async (value: number) => {
-  if (!value) return
-  getAttr()
-}
 const handleEdit = (record: Attr) => {
   isAddOrEdit.value = true
   Object.assign(attrParams, JSON.parse(JSON.stringify(record)))
@@ -295,7 +216,7 @@ const handleAddAttr = () => {
     categoryLevel: 3,
   })
   isAddOrEdit.value = true
-  attrParams.categoryId = formState.c3 as number
+  attrParams.categoryId = categoryLevel.c3 as number
 }
 
 const addAttrValue = () => {
