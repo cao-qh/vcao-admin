@@ -48,17 +48,15 @@
 import { reactive, ref, onMounted } from 'vue'
 import type { SelectProps } from 'ant-design-vue'
 import { reqC1, reqC2, reqC3 } from '@/api/product/attr/index'
+import type { CategoryLevel } from './type'
 
-defineProps<{ disabled: boolean }>()
+withDefaults(defineProps<{ disabled?: boolean }>(), {
+  disabled: false,
+})
 
 const emit = defineEmits(['c3Change'])
 
-interface FormState {
-  c1?: number
-  c2?: number
-  c3?: number
-}
-const formState = reactive<FormState>({})
+const formState = reactive<CategoryLevel>({})
 
 const fieldNames = { label: 'name', value: 'id' }
 const c1Arr = ref<SelectProps['options']>([])

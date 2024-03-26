@@ -132,6 +132,7 @@ import {
 import type { Attr, AttrValue, AttrResponseData } from '@/api/product/attr/type'
 import { message } from 'ant-design-vue'
 import Categoty from '@/components/Category/index.vue'
+import type { CategoryLevel } from '@/components/Category/type'
 
 defineOptions({ name: 'Attr' })
 
@@ -172,11 +173,7 @@ const attrValueColumns = [
   },
 ]
 
-const categoryLevel = reactive<{
-  c1?: number
-  c2?: number
-  c3?: number
-}>({})
+const categoryLevel = reactive<CategoryLevel>({})
 const attrArr = ref<Attr[]>([])
 const isAddOrEdit = ref<boolean>(false)
 const attrParams = reactive<Attr>({
