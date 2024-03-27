@@ -13,3 +13,16 @@ export interface SpuData {
   spuSaleAttrList: null
   spuImageList: null
 }
+
+export type Records = SpuData[]
+
+export interface HasSpuResponseData extends ResponseData {
+  data: {
+    records: Records
+    total: number
+    size: number
+    current: number
+    searchCount: boolean
+    pages: number
+  }
+}
