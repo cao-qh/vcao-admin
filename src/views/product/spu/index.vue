@@ -2,52 +2,57 @@
   <PageWrapper>
     <Category @c3-change="handleC3Change" />
 
-    <a-button
-      style="margin-bottom: 8px"
-      type="primary"
-      @click="handleAdd"
-      :disabled="!category3"
-    >
-      <template #icon>
-        <PlusOutlined />
-      </template>
-      添加SPU
-    </a-button>
-
-    <a-table
-      :columns="columns"
-      :pagination="pagination"
-      :data-source="records"
-      bordered
-      @change="handleTableChange"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'action'">
-          <a-space>
-            <a-button type="primary" size="small" title="添加SKU">
-              <template #icon>
-                <PlusOutlined />
-              </template>
-            </a-button>
-            <a-button type="primary" size="small" title="修改SPU">
-              <template #icon>
-                <EditOutlined />
-              </template>
-            </a-button>
-            <a-button type="primary" size="small" title="查看SKU列表">
-              <template #icon>
-                <EyeOutlined />
-              </template>
-            </a-button>
-            <a-button type="primary" danger size="small" title="删除SPU">
-              <template #icon>
-                <DeleteOutlined />
-              </template>
-            </a-button>
-          </a-space>
+    <div v-show="scene === 0">
+      <a-button
+        style="margin-bottom: 8px"
+        type="primary"
+        @click="handleAdd"
+        :disabled="!category3"
+      >
+        <template #icon>
+          <PlusOutlined />
         </template>
-      </template>
-    </a-table>
+        添加SPU
+      </a-button>
+
+      <a-table
+        :columns="columns"
+        :pagination="pagination"
+        :data-source="records"
+        bordered
+        @change="handleTableChange"
+      >
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex === 'action'">
+            <a-space>
+              <a-button type="primary" size="small" title="添加SKU">
+                <template #icon>
+                  <PlusOutlined />
+                </template>
+              </a-button>
+              <a-button type="primary" size="small" title="修改SPU">
+                <template #icon>
+                  <EditOutlined />
+                </template>
+              </a-button>
+              <a-button type="primary" size="small" title="查看SKU列表">
+                <template #icon>
+                  <EyeOutlined />
+                </template>
+              </a-button>
+              <a-button type="primary" danger size="small" title="删除SPU">
+                <template #icon>
+                  <DeleteOutlined />
+                </template>
+              </a-button>
+            </a-space>
+          </template>
+        </template>
+      </a-table>
+    </div>
+
+    <SpuForm v-show="scene === 1" />
+    <SkuForm v-show="scene === 2" />
   </PageWrapper>
 </template>
 
@@ -55,12 +60,15 @@
 import { reactive, ref } from 'vue'
 import { reqHasSpu } from '@/api/product/spu'
 import Category from '@/components/Category/index.vue'
+import SpuForm from './SpuForm.vue'
+import SkuForm from './SkuForm.vue'
 
 import type { HasSpuResponseData, Records } from '@/api/product/spu/type'
 
 defineOptions({ name: 'Spu' })
 
-const handleAdd = () => {}
+// 场景数据 0：显示已有SPU  1：添加或修改SPU 2：添加SKU
+const scene = ref<number>(1)
 
 const columns = [
   {
@@ -85,7 +93,7 @@ const columns = [
   },
 ]
 // 分页器对象
-let pagination = reactive({
+const pagination = reactive({
   pageSize: 10,
   total: 0,
   pageSizeOptions: ['5', '10', '20'],
@@ -119,6 +127,8 @@ const handleTableChange = (pag: any) => {
   pagination.pageSize = pag.pageSize
   getHasSpu()
 }
+
+const handleAdd = () => {}
 </script>
 
 <style></style>
