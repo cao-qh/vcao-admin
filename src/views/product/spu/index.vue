@@ -6,7 +6,7 @@
       <a-button
         style="margin-bottom: 8px"
         type="primary"
-        @click="handleAdd"
+        @click="addSpu"
         :disabled="!category3"
       >
         <template #icon>
@@ -68,7 +68,7 @@ import type { HasSpuResponseData, Records } from '@/api/product/spu/type'
 defineOptions({ name: 'Spu' })
 
 // 场景数据 0：显示已有SPU  1：添加或修改SPU 2：添加SKU
-const scene = ref<number>(1)
+const scene = ref<number>(0)
 
 const columns = [
   {
@@ -128,7 +128,9 @@ const handleTableChange = (pag: any) => {
   getHasSpu()
 }
 
-const handleAdd = () => {}
+const addSpu = () => {
+  scene.value = 1
+}
 </script>
 
 <style></style>
