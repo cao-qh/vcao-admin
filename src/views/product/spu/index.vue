@@ -34,7 +34,7 @@
                 type="primary"
                 size="small"
                 title="修改SPU"
-                @click="updateSpu"
+                @click="updateSpu(record)"
               >
                 <template #icon>
                   <EditOutlined />
@@ -56,7 +56,7 @@
       </a-table>
     </div>
 
-    <SpuForm v-show="scene === 1" @changeScene="changeScene" />
+    <SpuForm ref="spuFrom" v-show="scene === 1" @changeScene="changeScene" />
     <SkuForm v-show="scene === 2" />
   </PageWrapper>
 </template>
@@ -68,7 +68,11 @@ import Category from '@/components/Category/index.vue'
 import SpuForm from './SpuForm.vue'
 import SkuForm from './SkuForm.vue'
 
-import type { HasSpuResponseData, Records } from '@/api/product/spu/type'
+import type {
+  HasSpuResponseData,
+  Records,
+  SpuData,
+} from '@/api/product/spu/type'
 
 defineOptions({ name: 'Spu' })
 
@@ -140,9 +144,13 @@ const addSpu = () => {
 const changeScene = (num: number) => {
   scene.value = num
 }
-const updateSpu = () => {
+const updateSpu = (record: SpuData) => {
   scene.value = 1
+  spuFrom.value.initHasSpuData(record)
 }
+
+// 获取子组件实例spuform
+const spuFrom = ref<any>()
 </script>
 
 <style></style>

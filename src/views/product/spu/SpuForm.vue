@@ -46,6 +46,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import {
+  reqAllTradeMark,
+  reqSpuImageList,
+  reqSpuHasSaleAttr,
+  reqAllSaleAttr,
+} from '@/api/product/spu'
+import type {
+  SpuData,
+  AllTrademark,
+  SpuHasImg,
+  SaleAttrResponseData,
+  HasSaleAttrResponseData,
+  Trademark,
+  SpuImg,
+  SaleAttr,
+  HasSaleAttr,
+} from '@/api/product/spu/type'
+
 const emit = defineEmits(['changeScene'])
 
 const columns = [
@@ -74,6 +93,42 @@ const columns = [
 const cancel = () => {
   emit('changeScene', 0)
 }
+
+// 存储已有的spu这些数据
+const allTrademark = ref<Trademark[]>([])
+// 存储已有的spu图片
+const spuImg = ref<SpuImg[]>([])
+// spu销售属性
+const saleAttr = ref<SaleAttr[]>([])
+// 全部销售属性
+const allSaleAttr = ref<HasSaleAttr[]>([])
+
+const initHasSpuData = async (record: SpuData) => {
+  const [res, res1, res2, res3]: [
+    AllTrademark,
+    SpuHasImg,
+    SaleAttrResponseData,
+    HasSaleAttrResponseData,
+  ] = await Promise.all([
+    reqAllTradeMark(),
+    reqSpuImageList(record.id as number),
+    reqSpuHasSaleAttr(record.id as number),
+    reqAllSaleAttr(),
+  ])
+
+  // 存储全部品牌的数据
+  allTrademark.value = res.data
+  // 存储已有的spu图片
+  spuImg.value = res1.data
+  // 存储已有的spu销售属性
+  saleAttr.value = res2.data
+  // 存储全部销售属性
+  allSaleAttr.value = res3.data
+}
+
+defineExpose({
+  initHasSpuData,
+})
 </script>
 
 <style></style>

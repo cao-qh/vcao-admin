@@ -2,6 +2,7 @@ import request from '@/utils/request'
 import type {
   HasSpuResponseData,
   AllTrademark,
+  SpuHasImg,
   SaleAttrResponseData,
   HasSaleAttrResponseData,
 } from './type'
@@ -29,7 +30,7 @@ export const reqAllTradeMark = () => {
 }
 
 export const reqSpuImageList = (spuId: number) => {
-  return request.get(API.IMAGE_URL + spuId)
+  return request.get<any, SpuHasImg>(API.IMAGE_URL + spuId)
 }
 
 export const reqSpuHasSaleAttr = (spuId: number) => {
