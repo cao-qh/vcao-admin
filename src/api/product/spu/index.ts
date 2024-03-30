@@ -17,6 +17,10 @@ enum API {
   SPUHASSALEATTR_URL = '/admin/product/spuSaleAttrList/',
   // 获取整个项目全部的销售属性[颜色、版本、尺码]
   ALLSALEATTR_URL = '/admin/product/baseSaleAttrList',
+  // 追加新的SPU
+  ADDSPU_URL = '/admin/product/saveSpuInfo',
+  // 更新已有的SPU
+  UPDATESPU_URL = '/admin/product/updateSpuInfo',
 }
 
 export const reqHasSpu = (page: number, limit: number, category3Id: number) => {
@@ -41,3 +45,8 @@ export const reqSpuHasSaleAttr = (spuId: number) => {
 export const reqAllSaleAttr = () => {
   return request.get<any, HasSaleAttrResponseData>(API.ALLSALEATTR_URL)
 }
+
+// 添加新的SPU
+export const reqAddorUpdateSpu = (data: any) => {}
+
+// 更新已有的SPU
