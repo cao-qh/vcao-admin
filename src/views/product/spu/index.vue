@@ -30,7 +30,12 @@
                   <PlusOutlined />
                 </template>
               </a-button>
-              <a-button type="primary" size="small" title="修改SPU">
+              <a-button
+                type="primary"
+                size="small"
+                title="修改SPU"
+                @click="updateSpu"
+              >
                 <template #icon>
                   <EditOutlined />
                 </template>
@@ -51,7 +56,7 @@
       </a-table>
     </div>
 
-    <SpuForm v-show="scene === 1" />
+    <SpuForm v-show="scene === 1" @changeScene="changeScene" />
     <SkuForm v-show="scene === 2" />
   </PageWrapper>
 </template>
@@ -129,6 +134,13 @@ const handleTableChange = (pag: any) => {
 }
 
 const addSpu = () => {
+  scene.value = 1
+}
+
+const changeScene = (num: number) => {
+  scene.value = num
+}
+const updateSpu = () => {
   scene.value = 1
 }
 </script>
