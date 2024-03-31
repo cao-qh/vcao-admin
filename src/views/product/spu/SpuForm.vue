@@ -2,15 +2,23 @@
   <div>
     <a-form>
       <a-form-item label="SPU名称">
-        <a-input placeholder="请你输入SPU名称"></a-input>
+        <a-input
+          v-model:value="spuParams.spuName"
+          placeholder="请你输入SPU名称"
+        ></a-input>
       </a-form-item>
       <a-form-item label="SPU品牌">
-        <a-select placeholder="请选择产品">
-          <a-select-option value="1">Apple</a-select-option>
+        <a-select placeholder="请选择产品" v-model:value="spuParams.tmId">
+          <a-select-option v-for="item in allTrademark" :key="item.id">
+            {{ item.tmName }}
+          </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="SPU描述">
-        <a-textarea placeholder="请输入SPU描述" />
+        <a-textarea
+          v-model:value="spuParams.description"
+          placeholder="请输入SPU描述"
+        />
       </a-form-item>
       <a-form-item label="SPU图片">
         <a-upload
@@ -65,6 +73,7 @@ import type {
   HasSaleAttr,
 } from '@/api/product/spu/type'
 
+defineOptions({ name: 'SpuForm' })
 const emit = defineEmits(['changeScene'])
 
 const columns = [
@@ -102,8 +111,19 @@ const spuImg = ref<SpuImg[]>([])
 const saleAttr = ref<SaleAttr[]>([])
 // 全部销售属性
 const allSaleAttr = ref<HasSaleAttr[]>([])
+// 存储已有的SPU对象
+const spuParams = ref<SpuData>({
+  spuName: '',
+  tmId: -1,
+  description: '',
+  spuImageList: null,
+  category3Id: -1,
+  spuSaleAttrList: null,
+})
 
 const initHasSpuData = async (record: SpuData) => {
+  spuParams.value = record
+
   const [res, res1, res2, res3]: [
     AllTrademark,
     SpuHasImg,

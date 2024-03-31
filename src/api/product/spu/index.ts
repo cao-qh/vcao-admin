@@ -5,6 +5,7 @@ import type {
   SpuHasImg,
   SaleAttrResponseData,
   HasSaleAttrResponseData,
+  SpuData,
 } from './type'
 
 enum API {
@@ -47,6 +48,14 @@ export const reqAllSaleAttr = () => {
 }
 
 // 添加新的SPU
-export const reqAddorUpdateSpu = (data: any) => {}
+export const reqAddorUpdateSpu = (data: SpuData) => {
+  // 如果有ID更新
+  if (data.id) {
+    return request.post<any, any>(API.UPDATESPU_URL, data)
+  } else {
+    // 新增
+    return request.post<any, any>(API.ADDSPU_URL, data)
+  }
+}
 
 // 更新已有的SPU
