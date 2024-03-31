@@ -22,8 +22,13 @@
       </a-form-item>
       <a-form-item label="SPU图片">
         <a-upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          v-model:file-list="spuImg"
+          name="file"
+          action="/api/admin/product/fileUpload"
           list-type="picture-card"
+          :before-upload="beforeUpload"
+          @change="handleChange"
+          @preview="handlePreview"
         >
           <div>
             <plus-outlined />
@@ -50,6 +55,15 @@
       <a-button type="primary">保存</a-button>
       <a-button @click="cancel">取消</a-button>
     </a-space>
+
+    <a-modal
+      :open="previewVisible"
+      :title="previewTitle"
+      :footer="null"
+      @cancel="handleCancel"
+    >
+      <img alt="example" style="width: 100%" :src="previewImage" />
+    </a-modal>
   </div>
 </template>
 
@@ -72,6 +86,8 @@ import type {
   SaleAttr,
   HasSaleAttr,
 } from '@/api/product/spu/type'
+import { Upload, message } from 'ant-design-vue'
+import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
 
 defineOptions({ name: 'SpuForm' })
 const emit = defineEmits(['changeScene'])
@@ -121,6 +137,10 @@ const spuParams = ref<SpuData>({
   spuSaleAttrList: null,
 })
 
+const previewVisible = ref(false)
+const previewImage = ref('')
+const previewTitle = ref('')
+
 const initHasSpuData = async (record: SpuData) => {
   spuParams.value = record
 
@@ -139,11 +159,51 @@ const initHasSpuData = async (record: SpuData) => {
   // 存储全部品牌的数据
   allTrademark.value = res.data
   // 存储已有的spu图片
-  spuImg.value = res1.data
+  spuImg.value = res1.data.map((item) => {
+    return { name: item.imgName, url: item.imgUrl }
+  })
   // 存储已有的spu销售属性
   saleAttr.value = res2.data
   // 存储全部销售属性
   allSaleAttr.value = res3.data
+}
+
+const beforeUpload: UploadProps['beforeUpload'] = (file) => {
+  if (
+    file.type == 'image/jpeg' ||
+    file.type == 'image/png' ||
+    file.type == 'image/gif'
+  ) {
+    if (file.size / 1024 / 1024 < 4) {
+      return true
+    } else {
+      message.error('图片大小不能超过4M')
+      return Upload.LIST_IGNORE
+    }
+  } else {
+    message.error('上传格式为PNG|JPG|GIF')
+    return Upload.LIST_IGNORE
+  }
+}
+
+const handleChange = (info: UploadChangeParam) => {
+  if (info.file.status === 'done') {
+    info.fileList[info.fileList.length - 1].url = info.file.response.data
+  }
+  if (info.file.status === 'error') {
+    message.error('upload error')
+  }
+}
+
+const handlePreview: UploadProps['onPreview'] = async (file) => {
+  previewImage.value = file.url as string
+  previewVisible.value = true
+  previewTitle.value = file.name
+}
+
+const handleCancel = () => {
+  previewVisible.value = false
+  previewTitle.value = ''
 }
 
 defineExpose({
