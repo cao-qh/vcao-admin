@@ -38,17 +38,67 @@
       </a-form-item>
       <a-form-item label="SPU的销售属性">
         <a-space>
-          <a-select placeholder="请选择产品" style="width: 300px">
-            <a-select-option value="1">Apple</a-select-option>
+          <a-select
+            v-model:value="saleAttrIdAndValueName"
+            :placeholder="
+              unSelectSaleAttr.length
+                ? `还未选择${unSelectSaleAttr.length}个`
+                : '无'
+            "
+            style="width: 300px"
+          >
+            <a-select-option
+              v-for="item in unSelectSaleAttr"
+              :key="item.id"
+              :value="`${item.id}:${item.name}`"
+            >
+              {{ item.name }}
+            </a-select-option>
           </a-select>
-          <a-button type="primary">
+          <a-button
+            type="primary"
+            :disabled="!saleAttrIdAndValueName"
+            @click="addSaleAttr"
+          >
             <template #icon>
               <plus-outlined />
             </template>
-            添加属性值
+            添加属性
           </a-button>
         </a-space>
-        <a-table style="margin-top: 6px" :columns="columns"></a-table>
+        <a-table
+          style="margin-top: 6px"
+          :columns="columns"
+          :data-source="saleAttr"
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.dataIndex === 'spuSaleAttrValueList'">
+              <a-tag
+                v-for="item in record.spuSaleAttrValueList"
+                :key="item.id"
+                closable
+              >
+                {{ item.saleAttrValueName }}
+              </a-tag>
+              <a-button type="primary" size="small">
+                <template #icon>
+                  <PlusOutlined />
+                </template>
+              </a-button>
+            </template>
+            <template v-if="column.dataIndex === 'action'">
+              <a-button
+                type="primary"
+                size="small"
+                @click="saleAttr.splice(index, 1)"
+              >
+                <template #icon>
+                  <DeleteOutlined />
+                </template>
+              </a-button>
+            </template>
+          </template>
+        </a-table>
       </a-form-item>
     </a-form>
     <a-space>
@@ -68,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   reqAllTradeMark,
   reqSpuImageList,
@@ -95,22 +145,22 @@ const emit = defineEmits(['changeScene'])
 const columns = [
   {
     title: '序号',
-    dataIndex: 'index',
+    dataIndex: 'baseSaleAttrId',
     align: 'center',
   },
   {
     title: '属性名',
-    dataIndex: 'index',
+    dataIndex: 'saleAttrName',
     align: 'center',
   },
   {
     title: '属性值',
-    dataIndex: 'index',
+    dataIndex: 'spuSaleAttrValueList',
     align: 'center',
   },
   {
     title: '操作',
-    dataIndex: 'index',
+    dataIndex: 'action',
     align: 'center',
   },
 ]
@@ -140,6 +190,8 @@ const spuParams = ref<SpuData>({
 const previewVisible = ref(false)
 const previewImage = ref('')
 const previewTitle = ref('')
+
+const saleAttrIdAndValueName = ref<string>('')
 
 const initHasSpuData = async (record: SpuData) => {
   spuParams.value = record
@@ -204,6 +256,28 @@ const handlePreview: UploadProps['onPreview'] = async (file) => {
 const handleCancel = () => {
   previewVisible.value = false
   previewTitle.value = ''
+}
+
+// 计算出当前SPU还未拥有的销售属性
+const unSelectSaleAttr = computed(() => {
+  const unSelectArr = allSaleAttr.value.filter((item) => {
+    return saleAttr.value.every((item1) => {
+      return item.name != item1.saleAttrName
+    })
+  })
+  return unSelectArr
+})
+
+// 添加销售属性的方法
+const addSaleAttr = () => {
+  const [baseSaleAttrId, saleAttrName] = saleAttrIdAndValueName.value.split(':')
+  const newSaleAttr: SaleAttr = {
+    baseSaleAttrId: +baseSaleAttrId,
+    saleAttrName,
+    spuSaleAttrValueList: [],
+  }
+  saleAttr.value.push(newSaleAttr)
+  saleAttrIdAndValueName.value = ''
 }
 
 defineExpose({
