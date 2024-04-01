@@ -74,13 +74,27 @@
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.dataIndex === 'spuSaleAttrValueList'">
               <a-tag
-                v-for="item in record.spuSaleAttrValueList"
+                v-for="(item, index) in record.spuSaleAttrValueList"
                 :key="item.id"
                 closable
+                @close="record.spuSaleAttrValueList.splice(index, 1)"
               >
                 {{ item.saleAttrValueName }}
               </a-tag>
-              <a-button type="primary" size="small">
+              <a-input
+                v-if="record.flag"
+                v-model:value="record.saleAttrValue"
+                placeholder="请输入属性值"
+                size="small"
+                style="width: 100px"
+                @blur="toLook(record)"
+              />
+              <a-button
+                v-else
+                type="primary"
+                size="small"
+                @click="toEdit(record)"
+              >
                 <template #icon>
                   <PlusOutlined />
                 </template>
@@ -278,6 +292,37 @@ const addSaleAttr = () => {
   }
   saleAttr.value.push(newSaleAttr)
   saleAttrIdAndValueName.value = ''
+}
+
+const toEdit = (record: SaleAttr) => {
+  record.flag = true
+  record.saleAttrValue = ''
+}
+
+const toLook = (record: SaleAttr) => {
+  const { baseSaleAttrId, saleAttrName } = record
+  const newSaleAttr = {
+    baseSaleAttrId,
+    saleAttrValueName: saleAttrName,
+  }
+
+  if (saleAttrName.trim() == '') {
+    message.error('属性值不能为空')
+    return
+  }
+
+  // 判断属性值是否在数组大众存在
+  const repeat = record.spuSaleAttrValueList.find((item) => {
+    return item.saleAttrValueName == saleAttrName
+  })
+
+  if (repeat) {
+    message.error('属性值不能重复')
+    return
+  }
+
+  record.spuSaleAttrValueList.push(newSaleAttr)
+  record.flag = false
 }
 
 defineExpose({
