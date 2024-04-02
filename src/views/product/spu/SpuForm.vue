@@ -83,6 +83,7 @@
               </a-tag>
               <a-input
                 v-if="record.flag"
+                :ref="(el: HTMLElement) => el?.focus()"
                 v-model:value="record.saleAttrValue"
                 placeholder="请输入属性值"
                 size="small"
@@ -116,7 +117,9 @@
       </a-form-item>
     </a-form>
     <a-space>
-      <a-button type="primary">保存</a-button>
+      <a-button type="primary" @click="save" :disabled="!saleAttr.length">
+        保存
+      </a-button>
       <a-button @click="cancel">取消</a-button>
     </a-space>
 
@@ -138,6 +141,7 @@ import {
   reqSpuImageList,
   reqSpuHasSaleAttr,
   reqAllSaleAttr,
+  reqAddorUpdateSpu,
 } from '@/api/product/spu'
 import type {
   SpuData,
@@ -149,6 +153,7 @@ import type {
   SpuImg,
   SaleAttr,
   HasSaleAttr,
+  SaleAttrValue,
 } from '@/api/product/spu/type'
 import { Upload, message } from 'ant-design-vue'
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
@@ -205,7 +210,7 @@ const previewVisible = ref(false)
 const previewImage = ref('')
 const previewTitle = ref('')
 
-const saleAttrIdAndValueName = ref<string>('')
+const saleAttrIdAndValueName = ref<string | null>()
 
 const initHasSpuData = async (record: SpuData) => {
   spuParams.value = record
@@ -284,6 +289,8 @@ const unSelectSaleAttr = computed(() => {
 
 // 添加销售属性的方法
 const addSaleAttr = () => {
+  if (saleAttrIdAndValueName.value == null) return
+
   const [baseSaleAttrId, saleAttrName] = saleAttrIdAndValueName.value.split(':')
   const newSaleAttr: SaleAttr = {
     baseSaleAttrId: +baseSaleAttrId,
@@ -291,7 +298,7 @@ const addSaleAttr = () => {
     spuSaleAttrValueList: [],
   }
   saleAttr.value.push(newSaleAttr)
-  saleAttrIdAndValueName.value = ''
+  saleAttrIdAndValueName.value = null
 }
 
 const toEdit = (record: SaleAttr) => {
@@ -300,20 +307,20 @@ const toEdit = (record: SaleAttr) => {
 }
 
 const toLook = (record: SaleAttr) => {
-  const { baseSaleAttrId, saleAttrName } = record
-  const newSaleAttr = {
+  const { baseSaleAttrId, saleAttrValue } = record
+  const newSaleAttr: SaleAttrValue = {
     baseSaleAttrId,
-    saleAttrValueName: saleAttrName,
+    saleAttrValueName: saleAttrValue as string,
   }
 
-  if (saleAttrName.trim() == '') {
+  if (saleAttrValue?.trim() == '') {
     message.error('属性值不能为空')
     return
   }
 
   // 判断属性值是否在数组大众存在
   const repeat = record.spuSaleAttrValueList.find((item) => {
-    return item.saleAttrValueName == saleAttrName
+    return item.saleAttrValueName == saleAttrValue
   })
 
   if (repeat) {
@@ -323,6 +330,23 @@ const toLook = (record: SaleAttr) => {
 
   record.spuSaleAttrValueList.push(newSaleAttr)
   record.flag = false
+}
+
+const save = async () => {
+  // 整理参数
+  // 1.照片墙的数据
+  spuParams.value.spuImageList = spuImg.value.map((item) => {
+    return { imgName: item.name, imgUrl: item.url }
+  })
+  // 2.销售属性的数据
+  spuParams.value.spuSaleAttrList = saleAttr.value
+  const res = await reqAddorUpdateSpu(spuParams.value)
+  if (res.code === 200) {
+    message.success(spuParams.value.id ? '修改成功' : '添加成功')
+    emit('changeScene', 0)
+  } else {
+    message.error(spuParams.value.id ? '修改失败' : '添加失败')
+  }
 }
 
 defineExpose({

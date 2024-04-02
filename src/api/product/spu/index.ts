@@ -57,5 +57,3 @@ export const reqAddorUpdateSpu = (data: SpuData) => {
     return request.post<any, any>(API.ADDSPU_URL, data)
   }
 }
-
-// 更新已有的SPU

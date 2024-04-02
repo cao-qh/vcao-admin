@@ -143,6 +143,7 @@ const addSpu = () => {
 
 const changeScene = (num: number) => {
   scene.value = num
+  getHasSpu()
 }
 const updateSpu = (record: SpuData) => {
   scene.value = 1
