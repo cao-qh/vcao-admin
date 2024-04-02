@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form>
+    <a-form :label-col="labelCol">
       <a-form-item label="SPU名称">
         <a-input
           v-model:value="spuParams.spuName"
@@ -160,6 +160,11 @@ import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
 
 defineOptions({ name: 'SpuForm' })
 const emit = defineEmits(['changeScene'])
+
+const labelCol = {
+  xs: 24,
+  sm: 4,
+}
 
 const columns = [
   {

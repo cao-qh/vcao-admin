@@ -25,7 +25,12 @@
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'action'">
             <a-space>
-              <a-button type="primary" size="small" title="添加SKU">
+              <a-button
+                type="primary"
+                size="small"
+                title="添加SKU"
+                @click="addSku(record)"
+              >
                 <template #icon>
                   <PlusOutlined />
                 </template>
@@ -77,7 +82,7 @@ import type {
 defineOptions({ name: 'Spu' })
 
 // 场景数据 0：显示已有SPU  1：添加或修改SPU 2：添加SKU
-const scene = ref<number>(0)
+const scene = ref<number>(2)
 
 const columns = [
   {
@@ -156,6 +161,11 @@ const changeScene = ({ flag, param }: { flag: number; param: string }) => {
 const updateSpu = (record: SpuData) => {
   scene.value = 1
   spuFrom.value.initHasSpuData(record)
+}
+
+const addSku = (record: SpuData) => {
+  scene.value = 2
+  // spuFrom.value.initHasSpuData(record)
 }
 
 // 获取子组件实例spuform
