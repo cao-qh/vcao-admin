@@ -185,7 +185,10 @@ const columns = [
 ]
 
 const cancel = () => {
-  emit('changeScene', 0)
+  emit('changeScene', {
+    flag: 0,
+    param: 'update',
+  })
 }
 
 // 存储已有的spu这些数据
@@ -212,8 +215,28 @@ const previewTitle = ref('')
 
 const saleAttrIdAndValueName = ref<string | null>()
 
-const initAddSpu = () => {
-  console.log('添加SPU')
+const initAddSpu = async (category3: number) => {
+  // 清空表单数据
+  spuParams.value = {
+    spuName: '',
+    tmId: -1,
+    description: '',
+    spuImageList: null,
+    category3Id: -1,
+    spuSaleAttrList: null,
+  }
+  spuImg.value = []
+  saleAttr.value = []
+  saleAttrIdAndValueName.value = null
+
+  const [res, res1]: [AllTrademark, HasSaleAttrResponseData] =
+    await Promise.all([reqAllTradeMark(), reqAllSaleAttr()])
+
+  // 存储全部品牌的数据
+  allTrademark.value = res.data
+  // 存储全部销售属性
+  allSaleAttr.value = res1.data
+  spuParams.value.category3Id = category3
 }
 
 const initHasSpuData = async (record: SpuData) => {
@@ -349,7 +372,10 @@ const save = async () => {
   const res = await reqAddorUpdateSpu(spuParams.value)
   if (res.code === 200) {
     message.success(spuParams.value.id ? '修改成功' : '添加成功')
-    emit('changeScene', 0)
+    emit('changeScene', {
+      flag: 0,
+      param: spuParams.value.id ? 'update' : 'add',
+    })
   } else {
     message.error(spuParams.value.id ? '修改失败' : '添加失败')
   }

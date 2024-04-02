@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <Category @c3-change="handleC3Change" />
+    <Category :disabled="scene !== 0" @c3-change="handleC3Change" />
 
     <div v-show="scene === 0">
       <a-button
@@ -103,9 +103,9 @@ const columns = [
 ]
 // 分页器对象
 const pagination = reactive({
-  pageSize: 10,
+  pageSize: 3,
   total: 0,
-  pageSizeOptions: ['5', '10', '20'],
+  pageSizeOptions: ['3', '5', '10'],
   current: 1,
   showSizeChanger: true,
 })
@@ -120,8 +120,11 @@ const handleC3Change = ({ c3 }: { c3: number }) => {
 
 // 获取三级分类下额已有的spu
 const getHasSpu = async (reset = false) => {
+  if (reset) {
+    pagination.current = 1
+  }
   const res: HasSpuResponseData = await reqHasSpu(
-    reset ? 1 : pagination.current,
+    pagination.current,
     pagination.pageSize,
     category3.value as number,
   )
@@ -139,11 +142,16 @@ const handleTableChange = (pag: any) => {
 
 const addSpu = () => {
   scene.value = 1
+  spuFrom.value.initAddSpu(category3.value as number)
 }
 
-const changeScene = (num: number) => {
-  scene.value = num
-  getHasSpu()
+const changeScene = ({ flag, param }: { flag: number; param: string }) => {
+  scene.value = flag
+  if (param === 'update') {
+    getHasSpu()
+  } else {
+    getHasSpu(true)
+  }
 }
 const updateSpu = (record: SpuData) => {
   scene.value = 1
