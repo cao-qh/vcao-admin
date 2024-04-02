@@ -212,6 +212,10 @@ const previewTitle = ref('')
 
 const saleAttrIdAndValueName = ref<string | null>()
 
+const initAddSpu = () => {
+  console.log('添加SPU')
+}
+
 const initHasSpuData = async (record: SpuData) => {
   spuParams.value = record
 
@@ -238,6 +242,8 @@ const initHasSpuData = async (record: SpuData) => {
   // 存储全部销售属性
   allSaleAttr.value = res3.data
 }
+
+// 添加一个新的SPU初始化请求方法
 
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   if (
@@ -351,6 +357,7 @@ const save = async () => {
 
 defineExpose({
   initHasSpuData,
+  initAddSpu,
 })
 </script>
 
