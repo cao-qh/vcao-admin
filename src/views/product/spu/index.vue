@@ -7,7 +7,7 @@
         style="margin-bottom: 8px"
         type="primary"
         @click="addSpu"
-        :disabled="!category3"
+        :disabled="!categoryLevel.c3"
       >
         <template #icon>
           <PlusOutlined />
@@ -62,13 +62,14 @@
     </div>
 
     <SpuForm ref="spuFrom" v-show="scene === 1" @changeScene="changeScene" />
-    <SkuForm v-show="scene === 2" @changeScene="changeScene" />
+    <SkuForm ref="skuForm" v-show="scene === 2" @changeScene="changeScene" />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { reqHasSpu } from '@/api/product/spu'
+import type { CategoryLevel } from '@/components/Category/type'
 import Category from '@/components/Category/index.vue'
 import SpuForm from './SpuForm.vue'
 import SkuForm from './SkuForm.vue'
@@ -115,11 +116,15 @@ const pagination = reactive({
   showSizeChanger: true,
 })
 
-const category3 = ref<number | null>(null)
+const categoryLevel = ref<CategoryLevel>({})
 const records = ref<Records>([])
 
-const handleC3Change = ({ c3 }: { c3: number }) => {
-  category3.value = c3 as number
+// 获取子组件实例spuform
+const spuFrom = ref<any>()
+const skuForm = ref<any>()
+
+const handleC3Change = (clevel: CategoryLevel) => {
+  categoryLevel.value = clevel
   getHasSpu()
 }
 
@@ -131,7 +136,7 @@ const getHasSpu = async (reset = false) => {
   const res: HasSpuResponseData = await reqHasSpu(
     pagination.current,
     pagination.pageSize,
-    category3.value as number,
+    categoryLevel.value.c3 as number,
   )
   if (res.code == 200) {
     records.value = res.data.records
@@ -147,7 +152,7 @@ const handleTableChange = (pag: any) => {
 
 const addSpu = () => {
   scene.value = 1
-  spuFrom.value.initAddSpu(category3.value as number)
+  spuFrom.value.initAddSpu(categoryLevel.value.c3)
 }
 
 const changeScene = ({ flag, param }: { flag: number; param: string }) => {
@@ -165,11 +170,12 @@ const updateSpu = (record: SpuData) => {
 
 const addSku = (record: SpuData) => {
   scene.value = 2
-  // spuFrom.value.initHasSpuData(record)
+  skuForm.value.initSkuData(
+    categoryLevel.value.c1,
+    categoryLevel.value.c2,
+    record,
+  )
 }
-
-// 获取子组件实例spuform
-const spuFrom = ref<any>()
 </script>
 
 <style></style>
