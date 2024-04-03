@@ -62,7 +62,7 @@
     </div>
 
     <SpuForm ref="spuFrom" v-show="scene === 1" @changeScene="changeScene" />
-    <SkuForm v-show="scene === 2" />
+    <SkuForm v-show="scene === 2" @changeScene="changeScene" />
   </PageWrapper>
 </template>
 
@@ -82,7 +82,7 @@ import type {
 defineOptions({ name: 'Spu' })
 
 // 场景数据 0：显示已有SPU  1：添加或修改SPU 2：添加SKU
-const scene = ref<number>(2)
+const scene = ref<number>(0)
 
 const columns = [
   {

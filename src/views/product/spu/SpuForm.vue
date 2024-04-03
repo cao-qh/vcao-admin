@@ -163,7 +163,8 @@ const emit = defineEmits(['changeScene'])
 
 const labelCol = {
   xs: 24,
-  sm: 4,
+  sm: 6,
+  md: 4,
 }
 
 const columns = [
