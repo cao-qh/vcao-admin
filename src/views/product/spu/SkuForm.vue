@@ -34,10 +34,14 @@
             :key="item.id"
             :label="item.attrName"
           >
-            <a-select placeholder="请选择产品">
+            <a-select
+              placeholder="请选择产品"
+              v-model:value="item.attrIdAndValueId"
+            >
               <a-select-option
                 v-for="attrValue in item.attrValueList"
                 :key="attrValue.id"
+                :value="`${item.id}:${attrValue.id}`"
               >
                 {{ attrValue.valueName }}
               </a-select-option>
@@ -52,10 +56,11 @@
             :key="item.id"
             :label="item.saleAttrName"
           >
-            <a-select placeholder="请选择产品">
+            <a-select placeholder="请选择产品" v-model="item.saleIdAndValueId">
               <a-select-option
                 v-for="saleAttrValue in item.spuSaleAttrValueList"
                 :key="saleAttrValue.id"
+                :value="`${item.id}:${saleAttrValue.id}`"
               >
                 {{ saleAttrValue.saleAttrValueName }}
               </a-select-option>
@@ -75,7 +80,9 @@
               <img :src="record.imgUrl" style="width: 100px; height: 100px" />
             </template>
             <template v-if="column.dataIndex === 'action'">
-              <a-button type="primary">设置默认</a-button>
+              <a-button type="primary" @click="setDefault(record)">
+                设置默认
+              </a-button>
             </template>
           </template>
         </a-table>
@@ -167,6 +174,11 @@ const initSkuData = async (c1: number, c2: number, spuData: SpuData) => {
 
 const cancel = () => {
   emit('changeScene', { flag: 0, param: '' })
+}
+
+const setDefault = (record: any) => {
+  //收集图片地址
+  skuParams.skuDefaultImg = record.imgUrl
 }
 
 defineExpose({
