@@ -2,16 +2,30 @@
   <div>
     <a-form :label-col="labelCol">
       <a-form-item label="SKU名称">
-        <a-input placeholder="请输入SKU名称" />
+        <a-input
+          placeholder="请输入SKU名称"
+          v-model:value="skuParams.skuName"
+        />
       </a-form-item>
       <a-form-item label="价格(元)">
-        <a-input-number placeholder="请输入价格" style="width: 100%" />
+        <a-input-number
+          placeholder="请输入价格"
+          style="width: 100%"
+          v-model:value="skuParams.price"
+        />
       </a-form-item>
       <a-form-item label="重量(g)">
-        <a-input-number placeholder="请输入重量" style="width: 100%" />
+        <a-input-number
+          placeholder="请输入重量"
+          style="width: 100%"
+          v-model:value="skuParams.weight"
+        />
       </a-form-item>
       <a-form-item label="SKU描述">
-        <a-textarea placeholder="请输入SKU描述" />
+        <a-textarea
+          placeholder="请输入SKU描述"
+          v-model:value="skuParams.skuDesc"
+        />
       </a-form-item>
       <a-form-item label="平台属性">
         <a-form layout="inline" :colon="false">
@@ -76,10 +90,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { reqAttr } from '@/api/product/attr'
 import { reqSpuImageList, reqSpuHasSaleAttr } from '@/api/product/spu'
 import type { SpuData } from '@/api/product/spu/type'
+import type { SkuData } from '@/api/product/spu/type'
 
 const labelCol = {
   xs: 24,
@@ -114,8 +129,32 @@ const attrArr = ref<any>([])
 const saleArr = ref<any>([])
 // 照片的数据
 const imgArr = ref<any>([])
+// 收集SKU的参数
+const skuParams = reactive<SkuData>({
+  //父组件传递过来的数据
+  category3Id: '', //三级分类的ID
+  spuId: '', //已有的SPU的ID
+  tmId: '', //SPU品牌的ID
+  //v-model收集
+  skuName: '', //sku名字
+  price: '', //sku价格
+  weight: '', //sku重量
+  skuDesc: '', //sku的描述
+  skuAttrValueList: [
+    //平台属性的收集
+  ],
+  skuSaleAttrValueList: [
+    //销售属性
+  ],
+  skuDefaultImg: '', //sku图片地址
+})
 
 const initSkuData = async (c1: number, c2: number, spuData: SpuData) => {
+  //收集数据
+  skuParams.category3Id = spuData.category3Id
+  skuParams.spuId = spuData.id as number
+  skuParams.tmId = spuData.tmId
+
   const [res, res1, res2] = await Promise.all([
     reqAttr(c1, c2, spuData.category3Id),
     reqSpuHasSaleAttr(spuData.id as number),
