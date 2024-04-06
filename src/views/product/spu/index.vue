@@ -45,7 +45,12 @@
                   <EditOutlined />
                 </template>
               </a-button>
-              <a-button type="primary" size="small" title="查看SKU列表">
+              <a-button
+                type="primary"
+                size="small"
+                title="查看SKU列表"
+                @click="findSku(record)"
+              >
                 <template #icon>
                   <EyeOutlined />
                 </template>
@@ -63,6 +68,7 @@
 
     <SpuForm ref="spuFrom" v-show="scene === 1" @changeScene="changeScene" />
     <SkuForm ref="skuForm" v-show="scene === 2" @changeScene="changeScene" />
+    <SkuInfo ref="skuInfo" />
   </PageWrapper>
 </template>
 
@@ -73,6 +79,7 @@ import type { CategoryLevel } from '@/components/Category/type'
 import Category from '@/components/Category/index.vue'
 import SpuForm from './SpuForm.vue'
 import SkuForm from './SkuForm.vue'
+import SkuInfo from './SkuInfo.vue'
 
 import type {
   HasSpuResponseData,
@@ -175,6 +182,11 @@ const addSku = (record: SpuData) => {
     categoryLevel.value.c2,
     record,
   )
+}
+
+const skuInfo = ref<any>()
+const findSku = async (record: SpuData) => {
+  skuInfo.value.show(record)
 }
 </script>
 
