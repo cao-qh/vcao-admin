@@ -72,8 +72,9 @@
         <a-table
           bordered
           :columns="columns"
-          :row-selection="{}"
+          :row-selection="{ selectedRowKeys: selectedRowKeys }"
           :data-source="imgArr"
+          rowKey="id"
         >
           <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex === 'imgUrl'">
@@ -90,7 +91,7 @@
     </a-form>
 
     <a-space>
-      <a-button type="primary">保存</a-button>
+      <a-button type="primary" @click="save">保存</a-button>
       <a-button @click="cancel">取消</a-button>
     </a-space>
   </div>
@@ -99,9 +100,14 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { reqAttr } from '@/api/product/attr'
-import { reqSpuImageList, reqSpuHasSaleAttr } from '@/api/product/spu'
+import {
+  reqSpuImageList,
+  reqSpuHasSaleAttr,
+  reqAddSku,
+} from '@/api/product/spu'
 import type { SpuData } from '@/api/product/spu/type'
 import type { SkuData } from '@/api/product/spu/type'
+import { message } from 'ant-design-vue'
 
 const labelCol = {
   xs: 24,
@@ -176,9 +182,51 @@ const cancel = () => {
   emit('changeScene', { flag: 0, param: '' })
 }
 
+const selectedRowKeys = ref<number[]>([])
 const setDefault = (record: any) => {
+  // 将当前行选中
+  selectedRowKeys.value = [record.id]
   //收集图片地址
   skuParams.skuDefaultImg = record.imgUrl
+}
+
+const save = async () => {
+  // 整理参数
+  // 平台属性
+  skuParams.skuAttrValueList = attrArr.value.reduce((prev: any, next: any) => {
+    if (next.attrIdAndValueId) {
+      let [attrId, valueId] = next.attrIdAndValueId.split(':')
+      prev.push({
+        attrId,
+        valueId,
+      })
+    }
+    return prev
+  }, [])
+  // 销售属性
+  skuParams.skuSaleAttrValueList = saleArr.value.reduce(
+    (prev: any, next: any) => {
+      if (next.saleIdAndValueId) {
+        let [saleAttrId, saleAttrValueId] = next.saleIdAndValueId.split(':')
+        prev.push({
+          saleAttrId,
+          saleAttrValueId,
+        })
+      }
+      return prev
+    },
+    [],
+  )
+  // 发请求
+  let result: any = await reqAddSku(skuParams)
+  if (result.code == 200) {
+    // 成功
+    message.success('添加sku成功')
+    emit('changeScene', { flag: 0, param: '' })
+  } else {
+    // 失败
+    message.error('添加sku失败')
+  }
 }
 
 defineExpose({
