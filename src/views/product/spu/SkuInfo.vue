@@ -4,6 +4,7 @@
     :open="visible"
     :footer="null"
     :maskClosable="false"
+    width="50%"
     @cancel="visible = false"
   >
     <a-table
