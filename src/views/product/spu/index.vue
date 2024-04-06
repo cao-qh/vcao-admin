@@ -55,11 +55,18 @@
                   <EyeOutlined />
                 </template>
               </a-button>
-              <a-button type="primary" danger size="small" title="删除SPU">
-                <template #icon>
-                  <DeleteOutlined />
-                </template>
-              </a-button>
+              <a-popconfirm
+                title="是否确认删除?"
+                ok-text="确认"
+                cancel-text="取消"
+                @confirm="deleteSpu(record.id)"
+              >
+                <a-button type="primary" size="small" title="删除SPU" danger>
+                  <template #icon>
+                    <DeleteOutlined />
+                  </template>
+                </a-button>
+              </a-popconfirm>
             </a-space>
           </template>
         </template>
@@ -74,7 +81,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { reqHasSpu } from '@/api/product/spu'
+import { reqHasSpu, reqRemoveSpu } from '@/api/product/spu'
 import type { CategoryLevel } from '@/components/Category/type'
 import Category from '@/components/Category/index.vue'
 import SpuForm from './SpuForm.vue'
@@ -86,6 +93,7 @@ import type {
   Records,
   SpuData,
 } from '@/api/product/spu/type'
+import { message } from 'ant-design-vue'
 
 defineOptions({ name: 'Spu' })
 
@@ -187,6 +195,16 @@ const addSku = (record: SpuData) => {
 const skuInfo = ref<any>()
 const findSku = async (record: SpuData) => {
   skuInfo.value.show(record)
+}
+
+const deleteSpu = async (spuId: number) => {
+  const res: any = await reqRemoveSpu(spuId)
+  if (res.code == 200) {
+    message.success('删除成功')
+    getHasSpu()
+  } else {
+    message.error('删除失败')
+  }
 }
 </script>
 
