@@ -22,18 +22,19 @@
             <a-button
               type="primary"
               size="small"
-              title="添加SKU"
-              @click="addSku(record)"
+              title="上架"
+              @click="updateSale(record)"
             >
               <template #icon>
-                <ArrowUpOutlined />
+                <ArrowUpOutlined v-if="record.isSale === 1" />
+                <ArrowDownOutlined v-else />
               </template>
             </a-button>
             <a-button
               type="primary"
               size="small"
-              title="修改SPU"
-              @click="updateSpu(record)"
+              title="修改"
+              @click="updateSku"
             >
               <template #icon>
                 <EditOutlined />
@@ -83,6 +84,7 @@ import type {
   SkuData,
   SkuInfoData,
 } from '@/api/product/sku/type'
+import { message } from 'ant-design-vue'
 
 const columns = [
   {
@@ -173,6 +175,29 @@ const handleTableChange = (pag: any) => {
   pagination.pageSize = pag.pageSize
   getHasSku()
 }
-</script>
 
-<style></style>
+//商品的上架与下架的操作
+const updateSale = async (row: SkuData) => {
+  //如果当前商品的isSale==1,说明当前商品是上架的额状态->更新为下架
+  //否则else情况与上面情况相反
+  if (row.isSale == 1) {
+    //下架操作
+    await reqCancelSale(row.id as number)
+    //提示信息
+    message.success('下架成功')
+    //发请求获取当前更新完毕的全部已有的SKU
+    getHasSku()
+  } else {
+    //下架操作
+    await reqSaleSku(row.id as number)
+    //提示信息
+    message.success('上架成功')
+    //发请求获取当前更新完毕的全部已有的SKU
+    getHasSku()
+  }
+}
+
+const updateSku = () => {
+  message.success('正在开发中...')
+}
+</script>
