@@ -66,6 +66,8 @@
         </template>
       </template>
     </a-table>
+
+    <GoodsInfo ref="goodsInfo" />
   </PageWrapper>
 </template>
 
@@ -85,6 +87,7 @@ import type {
   SkuInfoData,
 } from '@/api/product/sku/type'
 import { message } from 'ant-design-vue'
+import GoodsInfo from './modules/GoodsInfo.vue'
 
 const columns = [
   {
@@ -199,5 +202,10 @@ const updateSale = async (row: SkuData) => {
 
 const updateSku = () => {
   message.success('正在开发中...')
+}
+
+const goodsInfo = ref()
+const findSku = () => {
+  goodsInfo.value.show()
 }
 </script>

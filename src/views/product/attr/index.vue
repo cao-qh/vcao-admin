@@ -24,7 +24,7 @@
           </template>
           <template v-if="column.dataIndex === 'action'">
             <a-space>
-              <a-button type="primary" @click="handleEdit(record)">
+              <a-button type="primary" @click="handleEdit(record)" size="small">
                 <template #icon>
                   <EditOutlined />
                 </template>
@@ -35,7 +35,7 @@
                 cancel-text="取消"
                 @confirm="handleDelete(record.id)"
               >
-                <a-button type="primary" danger>
+                <a-button type="primary" danger size="small">
                   <template #icon>
                     <DeleteOutlined />
                   </template>

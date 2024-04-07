@@ -23,7 +23,7 @@
         </template>
         <template v-if="column.dataIndex === 'action'">
           <a-space>
-            <a-button type="primary" @click="handleEdit(record)">
+            <a-button type="primary" size="small" @click="handleEdit(record)">
               <template #icon>
                 <EditOutlined />
               </template>
@@ -37,7 +37,7 @@
               <template #icon>
                 <question-circle-outlined style="color: red" />
               </template>
-              <a-button type="primary">
+              <a-button type="primary" size="small" danger>
                 <template #icon>
                   <DeleteOutlined />
                 </template>
