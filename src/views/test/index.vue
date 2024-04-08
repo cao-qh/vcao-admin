@@ -1,10 +1,11 @@
 <template>
-  <a-carousel :after-change="onChange">
-    <div><h3>1</h3></div>
-    <div><h3>2</h3></div>
-    <div><h3>3</h3></div>
-    <div><h3>4</h3></div>
-  </a-carousel>
+  <div style="width: 200px; height: 100px">
+    <a-carousel :after-change="onChange">
+      <div><h3>1</h3></div>
+      <div><h3>2</h3></div>
+      <div><h3>3</h3></div>
+    </a-carousel>
+  </div>
 </template>
 <script lang="ts" setup>
 const onChange = (current: number) => {

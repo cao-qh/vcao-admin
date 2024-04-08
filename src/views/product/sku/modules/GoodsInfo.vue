@@ -3,31 +3,44 @@
     <a-space direction="vertical">
       <a-row>
         <a-col :span="6">名称</a-col>
-        <a-col :span="18">华为mate60</a-col>
+        <a-col :span="18">{{ skuInfo.skuName }}</a-col>
       </a-row>
       <a-row>
         <a-col :span="6">描述</a-col>
-        <a-col :span="18">华为YYDS</a-col>
+        <a-col :span="18">{{ skuInfo.skuDesc }}</a-col>
       </a-row>
       <a-row>
         <a-col :span="6">价格</a-col>
-        <a-col :span="18">6999</a-col>
+        <a-col :span="18">{{ skuInfo.price }}</a-col>
       </a-row>
       <a-row>
         <a-col :span="6">平台属性</a-col>
         <a-col :span="18">
-          <a-tag v-for="item in 10" :key="item">{{ item }}</a-tag>
+          <a-tag v-for="item in skuInfo.skuAttrValueList" :key="item.attrId">
+            {{ item.attrName }}
+          </a-tag>
         </a-col>
       </a-row>
       <a-row>
         <a-col :span="6">销售属性</a-col>
         <a-col :span="18">
-          <a-tag v-for="item in 10" :key="item">{{ item }}</a-tag>
+          <a-tag
+            v-for="item in skuInfo.skuSaleAttrValueList"
+            :key="item.saleAttrValueId"
+          >
+            {{ item.saleAttrValueName }}
+          </a-tag>
         </a-col>
       </a-row>
       <a-row>
         <a-col :span="6">商品图片</a-col>
-        <a-col :span="18"></a-col>
+        <a-col :span="18">
+          <a-carousel style="width: 250px">
+            <div v-for="item in skuInfo.skuImageList" :key="item.id">
+              <img :src="item.imgUrl" width="100%" height="100%" />
+            </div>
+          </a-carousel>
+        </a-col>
       </a-row>
     </a-space>
   </a-drawer>
@@ -35,10 +48,17 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const open = ref<boolean>(false)
+//引入请求
+import { reqSkuInfo } from '@/api/product/sku'
+import type { SkuInfoData, SkuData } from '@/api/product/sku/type'
 
-const show = () => {
+const open = ref<boolean>(false)
+const skuInfo = ref<SkuData>({})
+
+const show = async (id: number) => {
   open.value = true
+  const res: SkuInfoData = await reqSkuInfo(id)
+  skuInfo.value = res.data
 }
 
 defineExpose({
@@ -46,4 +66,8 @@ defineExpose({
 })
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+::v-deep .slick-dots {
+  // background-color: gray;
+}
+</style>

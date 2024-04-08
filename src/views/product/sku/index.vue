@@ -78,14 +78,9 @@ import {
   reqSkuList,
   reqSaleSku,
   reqCancelSale,
-  reqSkuInfo,
   reqRemoveSku,
 } from '@/api/product/sku'
-import type {
-  SkuResponseData,
-  SkuData,
-  SkuInfoData,
-} from '@/api/product/sku/type'
+import type { SkuResponseData, SkuData } from '@/api/product/sku/type'
 import { message } from 'ant-design-vue'
 import GoodsInfo from './modules/GoodsInfo.vue'
 
@@ -205,7 +200,7 @@ const updateSku = () => {
 }
 
 const goodsInfo = ref()
-const findSku = () => {
-  goodsInfo.value.show()
+const findSku = (row: SkuData) => {
+  goodsInfo.value.show(row.id)
 }
 </script>

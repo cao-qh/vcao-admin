@@ -8,11 +8,13 @@ export interface Attr {
   id?: number
   attrId: number | string //平台属性的ID
   valueId: number | string //属性值的ID
+  attrName?: string
 }
 export interface saleArr {
   id?: number
   saleAttrId: number | string //属性ID
   saleAttrValueId: number | string //属性值的ID
+  saleAttrValueName?: string
 }
 export interface SkuData {
   category3Id?: string | number //三级分类的ID
@@ -22,6 +24,7 @@ export interface SkuData {
   price?: string | number //sku价格
   weight?: string | number //sku重量
   skuDesc?: string //sku的描述
+
   skuAttrValueList?: Attr[]
   skuSaleAttrValueList?: saleArr[]
   skuDefaultImg?: string //sku图片地址
