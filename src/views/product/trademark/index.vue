@@ -13,6 +13,7 @@
       :columns="columns"
       :bordered="true"
       :pagination="pagination"
+      :scroll="{ y: 'calc(100vh - 340px)' }"
       @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">

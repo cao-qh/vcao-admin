@@ -203,4 +203,18 @@ const goodsInfo = ref()
 const findSku = (row: SkuData) => {
   goodsInfo.value.show(row.id)
 }
+
+const deleteSpu = async (id: number) => {
+  //删除某一个已有商品的情况
+  let result: any = await reqRemoveSku(id)
+  if (result.code == 200) {
+    //提示信息
+    message.success('删除成功')
+    //获取已有全部商品
+    getHasSku()
+  } else {
+    //删除失败
+    message.error('删除失败')
+  }
+}
 </script>

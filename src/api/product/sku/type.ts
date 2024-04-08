@@ -25,6 +25,7 @@ export interface SkuData {
   weight?: string | number //sku重量
   skuDesc?: string //sku的描述
 
+  skuImageList?: any[]
   skuAttrValueList?: Attr[]
   skuSaleAttrValueList?: saleArr[]
   skuDefaultImg?: string //sku图片地址

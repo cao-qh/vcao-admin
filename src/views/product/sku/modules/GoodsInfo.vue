@@ -35,7 +35,7 @@
       <a-row>
         <a-col :span="6">商品图片</a-col>
         <a-col :span="18">
-          <a-carousel style="width: 250px">
+          <a-carousel style="width: 250px" :autoplay="true">
             <div v-for="item in skuInfo.skuImageList" :key="item.id">
               <img :src="item.imgUrl" width="100%" height="100%" />
             </div>
@@ -67,7 +67,12 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .slick-dots {
-  // background-color: gray;
+:deep(.slick-dots) {
+  li {
+    background-color: #bdc3c7;
+  }
+  li.slick-active button {
+    background-color: #34495e;
+  }
 }
 </style>
