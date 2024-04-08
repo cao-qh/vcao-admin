@@ -5,7 +5,7 @@
       bordered
       :pagination="pagination"
       :data-source="skuArr"
-      :scroll="{ y: 'calc(100vh - 300px' }"
+      :scroll="{ y: 'calc(100vh - 300px)' }"
       @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
