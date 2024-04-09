@@ -17,7 +17,7 @@
     </a-form>
 
     <a-space style="margin-bottom: 8px">
-      <a-button type="primary">添加</a-button>
+      <a-button type="primary" @click="handleAdd">添加</a-button>
       <a-button type="primary" danger>批量删除</a-button>
     </a-space>
 
@@ -39,7 +39,12 @@
               </template>
               分配角色
             </a-button>
-            <a-button type="primary" size="small" title="编辑">
+            <a-button
+              type="primary"
+              size="small"
+              title="编辑"
+              @click="handleEdit(record)"
+            >
               <template #icon>
                 <EditOutlined />
               </template>
@@ -49,7 +54,7 @@
               title="是否确认删除?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="deleteSpu(record.id)"
+              @confirm="deleteUser(record.id)"
             >
               <a-button type="primary" size="small" title="删除SPU" danger>
                 <template #icon>
@@ -62,13 +67,16 @@
         </template>
       </template>
     </a-table>
+
+    <AddOrEdit ref="addOrEdit" @refresh-table="getHasUser" />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { reqUserInfo } from '@/api/acl/user'
-import type { UserResponseData, Records } from '@/api/acl/user/type'
+import type { UserResponseData, Records, User } from '@/api/acl/user/type'
+import AddOrEdit from './modules/AddOrEdit.vue'
 
 const columns = [
   {
@@ -90,6 +98,9 @@ const columns = [
     title: '用户角色',
     dataIndex: 'roleName',
     align: 'center',
+    ellipsis: {
+      showTitle: true,
+    },
   },
   {
     title: '创建时间',
@@ -111,9 +122,9 @@ const columns = [
 
 // 分页器对象
 const pagination = reactive({
-  pageSize: 10,
+  pageSize: 3,
   total: 0,
-  pageSizeOptions: ['10', '20', '30'],
+  pageSizeOptions: ['3', '5', '10'],
   current: 1,
   showSizeChanger: true,
 })
@@ -143,6 +154,18 @@ const handleTableChange = (pag: any) => {
   pagination.current = pag.current
   pagination.pageSize = pag.pageSize
   getHasUser()
+}
+
+const deleteUser = (id: number) => {
+  console.log('id :>> ', id)
+}
+
+const addOrEdit = ref()
+const handleAdd = () => {
+  addOrEdit.value.show()
+}
+const handleEdit = (row: User) => {
+  addOrEdit.value.show(row)
 }
 </script>
 
