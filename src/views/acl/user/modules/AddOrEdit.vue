@@ -16,7 +16,7 @@
       <a-form-item label="用户昵称" name="name">
         <a-input v-model:value="userParams.name" placeholder="请输入昵称" />
       </a-form-item>
-      <a-form-item label="用户密码" name="password">
+      <a-form-item v-if="!userParams.id" label="用户密码" name="password">
         <a-input v-model:value="userParams.password" placeholder="请输入密码" />
       </a-form-item>
     </a-form>
@@ -79,6 +79,7 @@ const formRef = ref<any>()
 const show = (row: User) => {
   open.value = true
   Object.assign(userParams, {
+    id: 0,
     username: '',
     name: '',
     password: '',
@@ -97,9 +98,9 @@ const submit = async () => {
     await formRef.value.validate()
     const res = await reqAddOrUpdateUser(userParams)
     if (res.code == 200) {
-      message.success(userParams.id ? '修改成功' : '添加成功')
       open.value = false
-      emit('refresh-table', true)
+      message.success(userParams.id ? '修改成功' : '添加成功')
+      emit('refresh-table', userParams.id ? false : true)
     } else {
       message.error(userParams.id ? '修改失败' : '添加失败')
     }
