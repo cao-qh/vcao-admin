@@ -33,7 +33,12 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <a-space>
-            <a-button type="primary" size="small" title="分配角色">
+            <a-button
+              type="primary"
+              size="small"
+              title="分配角色"
+              @click="handleAssignRoles(record)"
+            >
               <template #icon>
                 <UserOutlined />
               </template>
@@ -68,7 +73,8 @@
       </template>
     </a-table>
 
-    <AddOrEdit ref="addOrEdit" @refresh-table="getHasUser" />
+    <AddOrEdit ref="addOrEdit" />
+    <AssignRoles ref="assignRoles" />
   </PageWrapper>
 </template>
 
@@ -77,6 +83,7 @@ import { reactive, ref, onMounted } from 'vue'
 import { reqUserInfo } from '@/api/acl/user'
 import type { UserResponseData, Records, User } from '@/api/acl/user/type'
 import AddOrEdit from './modules/AddOrEdit.vue'
+import AssignRoles from './modules/AssignRoles.vue'
 
 const columns = [
   {
@@ -122,9 +129,9 @@ const columns = [
 
 // 分页器对象
 const pagination = reactive({
-  pageSize: 3,
+  pageSize: 10,
   total: 0,
-  pageSizeOptions: ['3', '5', '10'],
+  pageSizeOptions: ['10', '20', '30'],
   current: 1,
   showSizeChanger: true,
 })
@@ -166,6 +173,11 @@ const handleAdd = () => {
 }
 const handleEdit = (row: User) => {
   addOrEdit.value.show(row)
+}
+
+const assignRoles = ref()
+const handleAssignRoles = (row: User) => {
+  assignRoles.value.show(row)
 }
 </script>
 

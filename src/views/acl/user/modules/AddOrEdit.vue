@@ -30,7 +30,6 @@ import { reqAddOrUpdateUser } from '@/api/acl/user'
 import { message } from 'ant-design-vue'
 
 defineOptions({ name: 'AddOrEdit' })
-const emit = defineEmits(['refresh-table'])
 
 const open = ref<boolean>(false)
 const title = ref<string>('添加用户')
