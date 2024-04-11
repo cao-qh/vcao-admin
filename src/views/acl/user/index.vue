@@ -4,13 +4,15 @@
       <a-row>
         <a-col :span="6">
           <a-form-item label="用户名">
-            <a-input placeholder="请输入用户名" />
+            <a-input placeholder="请输入用户名" v-model:value="keyword" />
           </a-form-item>
         </a-col>
         <a-col :span="18">
           <a-space style="float: right">
-            <a-button type="primary">查询</a-button>
-            <a-button>重置</a-button>
+            <a-button type="primary" :disabled="!keyword" @click="search">
+              查询
+            </a-button>
+            <a-button @click="reset">重置</a-button>
           </a-space>
         </a-col>
       </a-row>
@@ -93,6 +95,7 @@ import type { UserResponseData, Records, User } from '@/api/acl/user/type'
 import AddOrEdit from './modules/AddOrEdit.vue'
 import AssignRoles from './modules/AssignRoles.vue'
 import { message } from 'ant-design-vue'
+import useLayoutSettingStore from '@/store/modules/setting'
 
 const columns = [
   {
@@ -146,6 +149,8 @@ const pagination = reactive({
 })
 
 const userArr = ref<Records>([])
+const keyword = ref('')
+const settingStore = useLayoutSettingStore()
 
 onMounted(() => {
   getHasUser()
@@ -158,11 +163,21 @@ const getHasUser = async (reset = false) => {
   const res: UserResponseData = await reqUserInfo(
     pagination.current,
     pagination.pageSize,
+    keyword.value,
   )
   if (res.code == 200) {
     userArr.value = res.data.records
     pagination.total = res.data.total
   }
+}
+
+const search = () => {
+  getHasUser(true)
+  keyword.value = ''
+}
+
+const reset = () => {
+  settingStore.refsh = !settingStore.refsh
 }
 
 // 处理表格变化
