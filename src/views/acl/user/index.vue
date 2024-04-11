@@ -18,13 +18,21 @@
 
     <a-space style="margin-bottom: 8px">
       <a-button type="primary" @click="handleAdd">添加</a-button>
-      <a-button type="primary" danger>批量删除</a-button>
+      <a-button
+        :disabled="!deleteKeys.length"
+        type="primary"
+        danger
+        @click="batchDelete"
+      >
+        批量删除
+      </a-button>
     </a-space>
 
     <a-table
       bordered
       :columns="columns"
-      :row-selection="{ type: 'checkbox' }"
+      row-key="id"
+      :row-selection="{ type: 'checkbox', onChange: selectionChange }"
       :pagination="pagination"
       :data-source="userArr"
       :scroll="{ y: 'calc(100vh - 400px)' }"
@@ -74,16 +82,17 @@
     </a-table>
 
     <AddOrEdit ref="addOrEdit" />
-    <AssignRoles ref="assignRoles" />
+    <AssignRoles ref="assignRoles" @success="getHasUser" />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { reqUserInfo } from '@/api/acl/user'
+import { reqUserInfo, reqRemoveUser, reqSelectUser } from '@/api/acl/user'
 import type { UserResponseData, Records, User } from '@/api/acl/user/type'
 import AddOrEdit from './modules/AddOrEdit.vue'
 import AssignRoles from './modules/AssignRoles.vue'
+import { message } from 'ant-design-vue'
 
 const columns = [
   {
@@ -163,8 +172,14 @@ const handleTableChange = (pag: any) => {
   getHasUser()
 }
 
-const deleteUser = (id: number) => {
-  console.log('id :>> ', id)
+const deleteUser = async (id: number) => {
+  const res = await reqRemoveUser(id)
+  if (res.code == 200) {
+    message.success('删除成功')
+    getHasUser(true)
+  } else {
+    message.error('删除失败')
+  }
 }
 
 const addOrEdit = ref()
@@ -178,6 +193,21 @@ const handleEdit = (row: User) => {
 const assignRoles = ref()
 const handleAssignRoles = (row: User) => {
   assignRoles.value.show(row)
+}
+
+const deleteKeys = ref<number[]>([])
+const selectionChange = (selectedRowKeys: number[]) => {
+  deleteKeys.value = selectedRowKeys
+}
+
+const batchDelete = async () => {
+  const res = await reqSelectUser(deleteKeys.value)
+  if (res.code === 200) {
+    message.success('删除成功')
+    getHasUser(true)
+  } else {
+    message.error('删除失败')
+  }
 }
 </script>
 

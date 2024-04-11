@@ -38,10 +38,12 @@
 <script setup lang="ts">
 import type { User } from '@/api/acl/user/type'
 import { ref, reactive, watch } from 'vue'
-import { reqAllRole } from '@/api/acl/user'
-import type { AllRoleResponseData, AllRole } from '@/api/acl/user/type'
+import { reqAllRole, reqSetUserRole } from '@/api/acl/user'
+import type { AllRoleResponseData, SetRoleData } from '@/api/acl/user/type'
+import { message } from 'ant-design-vue'
 
 defineOptions({ name: 'AssignRoles' })
+const emit = defineEmits(['success'])
 
 const open = ref(false)
 const userParams = reactive<User>({})
@@ -87,7 +89,20 @@ watch(
   },
 )
 
-const confirm = () => {}
+const confirm = async () => {
+  const data: SetRoleData = {
+    userId: userParams.id as number,
+    roleIdList: state.checkedList,
+  }
+  const res = await reqSetUserRole(data)
+  if (res.code === 200) {
+    message.success('分配角色成功')
+    open.value = false
+    emit('success')
+  } else {
+    message.error('分配角色失败')
+  }
+}
 
 defineExpose({
   show,
