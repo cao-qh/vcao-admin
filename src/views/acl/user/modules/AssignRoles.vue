@@ -30,7 +30,7 @@
 
     <template #footer>
       <a-button style="margin-right: 8px" @click="open = false">取消</a-button>
-      <a-button type="primary" @click="">确定</a-button>
+      <a-button type="primary" @click="confirm">确定</a-button>
     </template>
   </a-drawer>
 </template>
@@ -86,6 +86,8 @@ watch(
     state.checkAll = val.length === allRoleArr.value.length
   },
 )
+
+const confirm = () => {}
 
 defineExpose({
   show,
