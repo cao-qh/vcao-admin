@@ -19,7 +19,7 @@
     </a-form>
 
     <a-space style="margin-bottom: 8px">
-      <a-button type="primary">添加职位</a-button>
+      <a-button type="primary" @click="handleAdd">添加职位</a-button>
     </a-space>
 
     <a-table
@@ -73,14 +73,17 @@
         </template>
       </template>
     </a-table>
+
+    <AddOrEdit ref="addOrEdit" @success="getHasRole" />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { reqAllRoleList } from '@/api/acl/role'
-import type { RoleResponseData, Records } from '@/api/acl/role/type'
+import type { RoleResponseData, Records, RoleData } from '@/api/acl/role/type'
 import useLayoutSettingStore from '@/store/modules/setting'
+import AddOrEdit from './AddOrEdit.vue'
 
 const columns = [
   {
@@ -157,6 +160,11 @@ const handleTableChange = (pag: any) => {
   pagination.current = pag.current
   pagination.pageSize = pag.pageSize
   getHasRole()
+}
+
+const addOrEdit = ref()
+const handleAdd = () => {
+  addOrEdit.value.show()
 }
 </script>
 
