@@ -38,12 +38,12 @@
               type="primary"
               size="small"
               title="分配角色"
-              @click="handleAssignRoles(record)"
+              @click="handleAssignPermission(record)"
             >
               <template #icon>
                 <UserOutlined />
               </template>
-              分配角色
+              分配权限
             </a-button>
             <a-button
               type="primary"
@@ -75,6 +75,7 @@
     </a-table>
 
     <AddOrEdit ref="addOrEdit" @success="getHasRole" />
+    <AssignPermission ref="assignPermission" @success="getHasRole" />
   </PageWrapper>
 </template>
 
@@ -83,7 +84,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { reqAllRoleList } from '@/api/acl/role'
 import type { RoleResponseData, Records, RoleData } from '@/api/acl/role/type'
 import useLayoutSettingStore from '@/store/modules/setting'
-import AddOrEdit from './AddOrEdit.vue'
+import AddOrEdit from './modules/AddOrEdit.vue'
+import AssignPermission from './modules/AssignPermission.vue'
 
 const columns = [
   {
@@ -165,6 +167,15 @@ const handleTableChange = (pag: any) => {
 const addOrEdit = ref()
 const handleAdd = () => {
   addOrEdit.value.show()
+}
+
+const handleEdit = (row: RoleData) => {
+  addOrEdit.value.show(row)
+}
+
+const assignPermission = ref()
+const handleAssignPermission = (row: RoleData) => {
+  assignPermission.value.show(row)
 }
 </script>
 
