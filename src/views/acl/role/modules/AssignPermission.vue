@@ -27,7 +27,6 @@ import type { RoleData, MenuResponseData, MenuList } from '@/api/acl/role/type'
 import { reqAllMenuList, reqSetPermisstion } from '@/api/acl/role'
 
 defineOptions({ name: 'AssignPermission' })
-const emit = defineEmits(['success'])
 
 const open = ref(false)
 const roleId = ref<number>(0)
