@@ -60,7 +60,7 @@
               title="是否确认删除?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="deleteUser(record.id)"
+              @confirm="deleteRole(record.id)"
             >
               <a-button type="primary" size="small" title="删除SPU" danger>
                 <template #icon>
@@ -81,11 +81,12 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { reqAllRoleList } from '@/api/acl/role'
+import { reqAllRoleList, reqRemoveRole } from '@/api/acl/role'
 import type { RoleResponseData, Records, RoleData } from '@/api/acl/role/type'
 import useLayoutSettingStore from '@/store/modules/setting'
 import AddOrEdit from './modules/AddOrEdit.vue'
 import AssignPermission from './modules/AssignPermission.vue'
+import { message } from 'ant-design-vue'
 
 const columns = [
   {
@@ -176,6 +177,16 @@ const handleEdit = (row: RoleData) => {
 const assignPermission = ref()
 const handleAssignPermission = (row: RoleData) => {
   assignPermission.value.show(row)
+}
+
+const deleteRole = async (id: number) => {
+  const res = await reqRemoveRole(id)
+  if (res.code === 200) {
+    message.success('删除成功')
+    getHasRole()
+  } else {
+    message.error('删除失败')
+  }
 }
 </script>
 
