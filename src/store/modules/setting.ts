@@ -6,6 +6,7 @@ const useLayoutSettingStore = defineStore('settingStore', {
     return {
       fold: false, //用户控制菜单折叠还是收起控制
       refsh: true, //仓库这个属性用于控制刷新效果
+      side: false, //用控制侧板的折叠
     }
   },
 })

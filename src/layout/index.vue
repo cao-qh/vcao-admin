@@ -17,6 +17,7 @@
       </a-layout-header>
       <a-layout-content class="layout-content">
         <RouterView v-if="layoutSettingStore.refsh" />
+        <Side />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -27,6 +28,7 @@ import { watch, nextTick } from 'vue'
 import Logo from './Logo/index.vue'
 import Menu from './Menu/index.vue'
 import Navbar from './Navbar/index.vue'
+import Side from './Side/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user'
 import useLayoutSettingStore from '@/store/modules/setting'

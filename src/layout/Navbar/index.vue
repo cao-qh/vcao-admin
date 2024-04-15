@@ -25,6 +25,7 @@
           <a-button
             :icon="h(resolveComponent('SettingOutlined'))"
             size="small"
+            @click="setting"
           />
 
           <a-dropdown>
@@ -81,6 +82,12 @@ const fullScreen = () => {
     document.documentElement.requestFullscreen()
   }
 }
+
+// 设置按钮
+const setting = () => {
+  layoutSettingStore.side = true
+}
+
 // 退出登录
 const logout = async () => {
   // 调用登出接口
