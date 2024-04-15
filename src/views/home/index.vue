@@ -1,14 +1,7 @@
 <template>
-  <div>
-    <h1>我是一级路由展示登录成功以后的数据</h1>
-  </div>
+  <PageWrapper :isShowBreadcrumb="false">11</PageWrapper>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue'
-onMounted(() => {
-  console.log('window :>> ', window.location.hash)
-})
-</script>
+<script setup lang="ts"></script>
 
 <style></style>

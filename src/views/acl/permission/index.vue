@@ -15,7 +15,7 @@
               size="small"
               title="分配角色"
               :disabled="record.level === 4"
-              @click="addPermisstion()"
+              @click="addPermisstion(record)"
             >
               {{ record.level === 3 ? '添加功能' : '添加菜单' }}
             </a-button>
@@ -32,6 +32,7 @@
               title="是否确认删除?"
               ok-text="确认"
               cancel-text="取消"
+              @confirm="deletePermisstion(record)"
             >
               <a-button
                 type="primary"
@@ -53,13 +54,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { reqAllPermission } from '@/api/acl/menu'
+import { reqAllPermisstion, reqRemoveMenu } from '@/api/acl/menu'
 import type {
   PermisstionResponseData,
   PermisstionList,
   Permisstion,
 } from '@/api/acl/menu/type'
 import AddOrEdit from './modules/AddOrEdit.vue'
+import { message } from 'ant-design-vue'
 
 defineOptions({ name: 'Permission' })
 
@@ -94,18 +96,28 @@ onMounted(() => {
 })
 
 const getHasPermission = async () => {
-  const res: PermisstionResponseData = await reqAllPermission()
+  const res: PermisstionResponseData = await reqAllPermisstion()
   if (res.code === 200) {
     permissionArr.value = res.data
   }
 }
 
 const addOrEdit = ref()
-const addPermisstion = () => {
-  addOrEdit.value.show()
+const addPermisstion = (record: Permisstion) => {
+  addOrEdit.value.show(record, 'add')
 }
 const updatePermisstion = (record: Permisstion) => {
-  addOrEdit.value.show(record)
+  addOrEdit.value.show(record, 'update')
+}
+
+const deletePermisstion = async (record: Permisstion) => {
+  const res = await reqRemoveMenu(record.id as number)
+  if (res.code === 200) {
+    message.success('删除成功')
+    getHasPermission()
+  } else {
+    message.error('删除失败')
+  }
 }
 </script>
 
