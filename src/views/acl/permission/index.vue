@@ -15,6 +15,7 @@
               size="small"
               title="分配角色"
               :disabled="record.level === 4"
+              @click="addPermisstion()"
             >
               {{ record.level === 3 ? '添加功能' : '添加菜单' }}
             </a-button>
@@ -23,6 +24,7 @@
               size="small"
               title="编辑"
               :disabled="record.level === 1"
+              @click="updatePermisstion(record)"
             >
               编辑
             </a-button>
@@ -44,6 +46,8 @@
         </template>
       </template>
     </a-table>
+
+    <AddOrEdit ref="addOrEdit" @success="getHasPermission" />
   </PageWrapper>
 </template>
 
@@ -53,7 +57,9 @@ import { reqAllPermission } from '@/api/acl/menu'
 import type {
   PermisstionResponseData,
   PermisstionList,
-} from '@/api/acl/permission/type'
+  Permisstion,
+} from '@/api/acl/menu/type'
+import AddOrEdit from './modules/AddOrEdit.vue'
 
 defineOptions({ name: 'Permission' })
 
@@ -92,6 +98,14 @@ const getHasPermission = async () => {
   if (res.code === 200) {
     permissionArr.value = res.data
   }
+}
+
+const addOrEdit = ref()
+const addPermisstion = () => {
+  addOrEdit.value.show()
+}
+const updatePermisstion = (record: Permisstion) => {
+  addOrEdit.value.show(record)
 }
 </script>
 
