@@ -6,9 +6,9 @@
     @close="layoutSettingStore.side = false"
   >
     <a-form :wrapper-col="{ span: 6 }">
-      <!-- <a-form-item label="主题颜色">
-        <a-input type="color" />
-      </a-form-item> -->
+      <a-form-item label="主题颜色">
+        <a-input type="color" :value="layoutSettingStore.themeColor" />
+      </a-form-item>
       <a-form-item label="暗黑模式">
         <a-switch v-model:checked="layoutSettingStore.dark"></a-switch>
       </a-form-item>

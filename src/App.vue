@@ -5,6 +5,9 @@
       algorithm: layoutSettingStore.dark
         ? theme.darkAlgorithm
         : theme.defaultAlgorithm,
+      token: {
+        colorPrimary: layoutSettingStore.themeColor,
+      },
     }"
   >
     <RouterView />

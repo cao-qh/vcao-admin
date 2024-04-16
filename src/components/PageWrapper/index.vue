@@ -59,8 +59,8 @@ defineProps({
   }
   .dark {
     background-color: #141414;
-    border-top: 1px solid #636e72;
-    border-bottom: 1px solid #636e72;
+    border-top: 1px solid #434343;
+    border-bottom: 1px solid #434343;
   }
 
   .content {
@@ -70,7 +70,6 @@ defineProps({
 
     .content-card {
       padding: 0;
-      border-radius: 0;
     }
   }
 }
