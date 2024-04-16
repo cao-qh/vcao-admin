@@ -6,7 +6,7 @@
       mode="inline"
       :open-keys="state.openKeys"
       :items="items"
-      theme="dark"
+      :theme="layoutSettingStore.dark ? 'dark' : 'light'"
       @openChange="onOpenChange"
       @click="goRoute"
     ></a-menu>
@@ -20,6 +20,8 @@ import { useRouter, useRoute } from 'vue-router'
 import type { ItemType, MenuProps } from 'ant-design-vue'
 import type { MenuState } from './type'
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
+import useLayoutSettingStore from '@/store/modules/setting'
+const layoutSettingStore = useLayoutSettingStore()
 
 // 获取路由器对象
 const $router = useRouter()
@@ -130,9 +132,9 @@ watchEffect(() => {
   overflow-y: scroll;
   user-select: none;
 
-  .menu {
-    background-color: $base-menu-color;
-  }
+  // .menu {
+  //   background-color: $base-menu-color;
+  // }
 }
 
 .menu-container::-webkit-scrollbar {

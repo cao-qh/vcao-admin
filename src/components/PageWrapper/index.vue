@@ -1,6 +1,10 @@
 <template>
   <div class="page-wrapper">
-    <div class="breadcrumb" v-if="isShowBreadcrumb">
+    <div
+      class="breadcrumb"
+      :class="{ dark: layoutSettingStore.dark }"
+      v-if="isShowBreadcrumb"
+    >
       <a-breadcrumb :routes="routes"></a-breadcrumb>
     </div>
     <div class="content">
@@ -15,6 +19,9 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Route } from './type'
+import useLayoutSettingStore from '@/store/modules/setting'
+
+const layoutSettingStore = useLayoutSettingStore()
 
 // 使用路由对象
 const $route = useRoute()
@@ -50,6 +57,12 @@ defineProps({
     align-items: center;
     padding: 0 10px;
   }
+  .dark {
+    background-color: #141414;
+    border-top: 1px solid #636e72;
+    border-bottom: 1px solid #636e72;
+  }
+
   .content {
     padding: 16px;
     height: calc(100% - 50px);

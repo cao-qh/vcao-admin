@@ -6,13 +6,17 @@
       collapsible
       :trigger="null"
       width="220px"
+      :theme="layoutSettingStore.dark ? 'dark' : 'light'"
       collapsedWidth="50px"
     >
       <Logo v-show="!layoutSettingStore.fold" />
       <Menu :menuList="userStore.menuRoutes" />
     </a-layout-sider>
     <a-layout>
-      <a-layout-header class="layout-header">
+      <a-layout-header
+        class="layout-header"
+        :style="{ background: layoutSettingStore.dark ? '#141414' : '#fff' }"
+      >
         <Navbar />
       </a-layout-header>
       <a-layout-content class="layout-content">
@@ -50,12 +54,11 @@ watch(
 .layout-container {
   height: 100vh;
 
-  .layout-sider {
-    background-color: $base-menu-color;
-  }
+  // .layout-sider {
+  //   background-color: $base-menu-color;
+  // }
 
   .layout-header {
-    background: #fff;
     padding: 0 10px;
     height: $base-header-height;
     line-height: $base-header-height;
