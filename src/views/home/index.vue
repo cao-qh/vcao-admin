@@ -1,17 +1,9 @@
 <template>
-  <PageWrapper :isShowBreadcrumb="false">
-    <a-config-provider
-      :theme="{
-        algorithm: theme.darkAlgorithm,
-      }"
-    >
-      <a-button>按钮</a-button>
-    </a-config-provider>
-  </PageWrapper>
+  <PageWrapper :isShowBreadcrumb="false">首页</PageWrapper>
 </template>
 
 <script setup lang="ts">
-import { message, theme } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import { onMounted } from 'vue'
 
 onMounted(() => {
