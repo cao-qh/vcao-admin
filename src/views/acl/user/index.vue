@@ -4,12 +4,12 @@
       <a-row>
         <a-col :span="6">
           <a-form-item label="用户名">
-            <a-input placeholder="请输入用户名" v-model:value="keyword" />
+            <a-input placeholder="请输入用户名" v-model:value="username" />
           </a-form-item>
         </a-col>
         <a-col :span="18">
           <a-space style="float: right">
-            <a-button type="primary" :disabled="!keyword" @click="search">
+            <a-button type="primary" :disabled="!username" @click="search">
               查询
             </a-button>
             <a-button @click="reset">重置</a-button>
@@ -30,24 +30,21 @@
       </a-button>
     </a-space>
 
-    <a-table
-      bordered
+    <STable
+      ref="table"
       :columns="columns"
-      row-key="id"
-      :row-selection="{ type: 'checkbox', onChange: selectionChange }"
-      :pagination="pagination"
-      :data-source="userArr"
-      :scroll="{ y: 'calc(100vh - 400px)' }"
-      @change="handleTableChange"
+      :row-selection="rowSelection"
+      :data="reqData"
+      :pageSizeOptions="['3', '5', '10']"
     >
-      <template #bodyCell="{ column, record }">
+      <template #bodyCell="{ column, row }">
         <template v-if="column.dataIndex === 'action'">
           <a-space>
             <a-button
               type="primary"
               size="small"
               title="分配角色"
-              @click="handleAssignRoles(record)"
+              @click="handleAssignRoles(row)"
             >
               <template #icon>
                 <UserOutlined />
@@ -58,7 +55,7 @@
               type="primary"
               size="small"
               title="编辑"
-              @click="handleEdit(record)"
+              @click="handleEdit(row)"
             >
               <template #icon>
                 <EditOutlined />
@@ -69,7 +66,7 @@
               title="是否确认删除?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="deleteUser(record.id)"
+              @confirm="deleteUser(row.id)"
             >
               <a-button type="primary" size="small" title="删除SPU" danger>
                 <template #icon>
@@ -81,23 +78,25 @@
           </a-space>
         </template>
       </template>
-    </a-table>
+    </STable>
 
     <AddOrEdit ref="addOrEdit" />
-    <AssignRoles ref="assignRoles" @success="getHasUser" />
+    <AssignRoles ref="assignRoles" @success="table?.refresh" />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { reqUserInfo, reqRemoveUser, reqSelectUser } from '@/api/acl/user'
-import type { UserResponseData, Records, User } from '@/api/acl/user/type'
+import type { User } from '@/api/acl/user/type'
 import AddOrEdit from './modules/AddOrEdit.vue'
 import AssignRoles from './modules/AssignRoles.vue'
 import { message } from 'ant-design-vue'
 import useLayoutSettingStore from '@/store/modules/setting'
+import STable from '@/components/STable/index.vue'
+import type { TableColumnType } from 'ant-design-vue'
 
-const columns = [
+const columns: TableColumnType[] = [
   {
     title: '序号',
     dataIndex: 'id',
@@ -139,59 +138,34 @@ const columns = [
   },
 ]
 
-// 分页器对象
-const pagination = reactive({
-  pageSize: 10,
-  total: 0,
-  pageSizeOptions: ['10', '20', '30'],
-  current: 1,
-  showSizeChanger: true,
-})
-
-const userArr = ref<Records>([])
-const keyword = ref('')
 const settingStore = useLayoutSettingStore()
+const username = ref('')
+const table = ref()
 
-onMounted(() => {
-  getHasUser()
-})
-
-const getHasUser = async (reset = false) => {
-  if (reset) {
-    pagination.current = 1
-  }
-  const res: UserResponseData = await reqUserInfo(
-    pagination.current,
-    pagination.pageSize,
-    keyword.value,
-  )
-  if (res.code == 200) {
-    userArr.value = res.data.records
-    pagination.total = res.data.total
-  }
+const reqData = async (currentPage: number, pageSize: number) => {
+  return reqUserInfo(currentPage, pageSize, username.value)
 }
 
+const selectionChange = (selectedRowKeys: number[]) => {
+  deleteKeys.value = selectedRowKeys
+}
+
+const rowSelection = { type: 'checkbox', onChange: selectionChange }
+
 const search = () => {
-  getHasUser(true)
-  keyword.value = ''
+  table.value.refresh()
+  username.value = ''
 }
 
 const reset = () => {
-  settingStore.refsh = !settingStore.refsh
-}
-
-// 处理表格变化
-const handleTableChange = (pag: any) => {
-  pagination.current = pag.current
-  pagination.pageSize = pag.pageSize
-  getHasUser()
+  settingStore.refresh = true
 }
 
 const deleteUser = async (id: number) => {
   const res = await reqRemoveUser(id)
   if (res.code == 200) {
     message.success('删除成功')
-    getHasUser(true)
+    table.value.refresh(true)
   } else {
     message.error('删除失败')
   }
@@ -211,15 +185,12 @@ const handleAssignRoles = (row: User) => {
 }
 
 const deleteKeys = ref<number[]>([])
-const selectionChange = (selectedRowKeys: number[]) => {
-  deleteKeys.value = selectedRowKeys
-}
 
 const batchDelete = async () => {
   const res = await reqSelectUser(deleteKeys.value)
   if (res.code === 200) {
     message.success('删除成功')
-    getHasUser(true)
+    table.value.refresh(true)
   } else {
     message.error('删除失败')
   }
