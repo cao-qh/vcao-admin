@@ -38,6 +38,7 @@ declare module 'vue' {
     PageWrapper: typeof import('./src/components/PageWrapper/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchForm: typeof import('./src/components/SearchForm/index.vue')['default']
     STable: typeof import('./src/components/STable/index.vue')['default']
     SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
     UploadImage: typeof import('./src/components/UploadImage/index.vue')['default']
