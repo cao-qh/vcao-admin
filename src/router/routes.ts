@@ -195,6 +195,38 @@ export const constantRoute = [
       },
     ],
   },
+  // 个人管理
+  {
+    path: '/personal-manager',
+    component: Layout,
+    name: 'personal-manager',
+    meta: {
+      title: '个人管理',
+      icon: 'UserOutlined',
+    },
+    redirect: '/personal-manager/info',
+    children: [
+      // 个人信息
+      {
+        path: '/personal-manager/info',
+        component: () =>
+          import('@/views/admin/personal-manager/info/index.vue'),
+        name: 'info',
+        meta: {
+          title: '个人信息',
+        },
+      },
+      // 个人日志
+      {
+        path: '/personal-manager/log',
+        component: () => import('@/views/admin/personal-manager/log/index.vue'),
+        name: 'log',
+        meta: {
+          title: '个人日志',
+        },
+      },
+    ],
+  },
   {
     // 404
     path: '/404',
