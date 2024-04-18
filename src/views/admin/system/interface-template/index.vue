@@ -1,30 +1,36 @@
 <template>
   <PageWrapper>
-    <a-form>
-      <a-row>
-        <a-col :span="6">
-          <a-form-item label="模板名称">
-            <a-input v-model:value="templateName" />
-          </a-form-item>
-        </a-col>
-        <a-col :span="18">
-          <a-space style="float: right">
-            <a-button type="primary" @click="search">查询</a-button>
-            <a-button @click="reset">重置</a-button>
-          </a-space>
-        </a-col>
-      </a-row>
-    </a-form>
+    <SearchForm
+      :formItems="formItems"
+      @search="search"
+      :searchLoading="searchLoading"
+    />
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import SearchForm from '@/components/SearchForm/index.vue'
+import type { FormItems } from '@/components/SearchForm/type'
 
-const templateName = ref('')
+const searchLoading = ref(false)
+const formItems = reactive<FormItems>([
+  {
+    filed: 'templateName',
+    label: '模板名称',
+    type: 'input',
+    placeholder: '请输入模板名称',
+    value: '',
+  },
+])
 
-const search = () => {}
-const reset = () => {}
+const search = () => {
+  searchLoading.value = true
+  console.log('search')
+  setTimeout(() => {
+    searchLoading.value = false
+  }, 2000)
+}
 </script>
 
 <style></style>
