@@ -99,7 +99,6 @@ const submit = async () => {
     if (res.code == 200) {
       open.value = false
       message.success(userParams.id ? '修改成功' : '添加成功')
-      // emit('refresh-table', userParams.id ? false : true)
       window.location.reload()
     } else {
       message.error(userParams.id ? '修改失败' : '添加失败')

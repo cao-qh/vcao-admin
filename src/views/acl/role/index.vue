@@ -155,7 +155,7 @@ const search = () => {
 }
 
 const reset = () => {
-  settingStore.refsh = !settingStore.refsh
+  settingStore.refresh = true
 }
 
 // 处理表格变化

@@ -69,7 +69,7 @@ const changeManuFold = () => {
 }
 // 刷新二级路由页面
 const reload = () => {
-  layoutSettingStore.refsh = false
+  layoutSettingStore.refresh = true
 }
 // 全屏
 const fullScreen = () => {

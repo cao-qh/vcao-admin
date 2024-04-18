@@ -20,7 +20,7 @@
         <Navbar />
       </a-layout-header>
       <a-layout-content class="layout-content">
-        <RouterView v-if="layoutSettingStore.refsh" />
+        <RouterView v-if="!layoutSettingStore.refresh" />
         <Side />
       </a-layout-content>
     </a-layout>
@@ -41,10 +41,10 @@ const layoutSettingStore = useLayoutSettingStore()
 
 // 监听二级路由刷新状态改变
 watch(
-  () => layoutSettingStore.refsh,
+  () => layoutSettingStore.refresh,
   () => {
     nextTick(() => {
-      layoutSettingStore.refsh = true
+      layoutSettingStore.refresh = false
     })
   },
 )
