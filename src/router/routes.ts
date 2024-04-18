@@ -172,6 +172,29 @@ export const constantRoute = [
       },
     ],
   },
+  // 系统管理
+  {
+    path: '/system',
+    component: Layout,
+    name: 'system',
+    meta: {
+      title: '系统管理',
+      icon: 'SettingOutlined',
+    },
+    redirect: '/system/interface-template',
+    children: [
+      // 接口模板
+      {
+        path: '/system/interface-template',
+        component: () =>
+          import('@/views/admin/system/interface-template/index.vue'),
+        name: 'user',
+        meta: {
+          title: '接口模板',
+        },
+      },
+    ],
+  },
   {
     // 404
     path: '/404',
