@@ -2,12 +2,12 @@
   <a-table
     bordered
     :columns="columns"
-    row-key="id"
+    :row-key="rowKey"
     :row-selection="rowSelection"
     :pagination="pagination"
     :data-source="dataSource"
     :loading="loading"
-    :scroll="{ y: 'calc(100vh - 400px)' }"
+    :scroll="scroll"
     @change="handleTableChange"
   >
     <template #bodyCell="{ column, row }">
@@ -18,25 +18,22 @@
 
 <script setup lang="ts">
 import { reactive, onMounted, ref } from 'vue'
-import type { TableColumnType } from 'ant-design-vue'
+import type { STableProps } from './type'
 
 defineOptions({ name: 'STable' })
 
-const props = defineProps<{
-  columns: TableColumnType[]
-  rowSelection: any
-  data: (currentPage: number, pageSize: number) => any
-  pageSizeOptions: string[]
-}>()
+const props = withDefaults(defineProps<STableProps>(), {
+  pageSizeOptions: () => ['10', '20', '30'],
+})
 
 const dataSource = ref([])
 const loading = ref(false)
 
 // 分页器对象
 const pagination = reactive({
-  pageSize: 10,
+  pageSize: Number(props.pageSizeOptions[0]),
   total: 0,
-  pageSizeOptions: props.pageSizeOptions || ['10', '20', '30'],
+  pageSizeOptions: props.pageSizeOptions,
   current: 1,
   showSizeChanger: true,
 })
@@ -46,7 +43,9 @@ onMounted(() => {
 })
 
 const getData = async () => {
+  loading.value = true
   const res = await props.data(pagination.current, pagination.pageSize)
+  loading.value = false
   if (res.code == 200) {
     dataSource.value = res.data.records
     pagination.total = res.data.total

@@ -9,9 +9,7 @@
         </a-col>
         <a-col :span="18">
           <a-space style="float: right">
-            <a-button type="primary" :disabled="!username" @click="search">
-              查询
-            </a-button>
+            <a-button type="primary" @click="search">查询</a-button>
             <a-button @click="reset">重置</a-button>
           </a-space>
         </a-col>
@@ -33,9 +31,11 @@
     <STable
       ref="table"
       :columns="columns"
+      row-key="id"
       :row-selection="rowSelection"
       :data="reqData"
       :pageSizeOptions="['3', '5', '10']"
+      :scroll="{ y: 'calc(100vh - 400px)' }"
     >
       <template #bodyCell="{ column, row }">
         <template v-if="column.dataIndex === 'action'">
@@ -154,7 +154,6 @@ const rowSelection = { type: 'checkbox', onChange: selectionChange }
 
 const search = () => {
   table.value.refresh()
-  username.value = ''
 }
 
 const reset = () => {
