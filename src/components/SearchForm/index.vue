@@ -8,6 +8,22 @@
             v-model:value="item.value"
             :placeholder="item.placeholder"
           />
+          <a-select
+            v-if="item.type === 'select'"
+            v-model:value="item.value"
+            :placeholder="item.placeholder"
+            allowClear
+            showSearch
+            :filterOption="filterOption"
+          >
+            <a-select-option
+              v-for="option in item.options"
+              :key="option.value"
+              :label="option.label"
+            >
+              {{ option.label }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
       </a-col>
       <a-col :span="btnSpan">
@@ -41,6 +57,10 @@ const btnSpan = computed(() => {
   const result = props.formItems.length % 4
   return 24 - result * 6
 })
+
+const filterOption = (input: string, option: any) => {
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+}
 </script>
 
 <style></style>
