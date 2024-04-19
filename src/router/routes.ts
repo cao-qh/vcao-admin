@@ -188,9 +188,32 @@ export const constantRoute = [
         path: '/system/interface-template',
         component: () =>
           import('@/views/admin/system/interface-template/index.vue'),
-        name: 'user',
+        name: 'interface-template',
         meta: {
           title: '接口模板',
+        },
+      },
+    ],
+  },
+  // 活动管理
+  {
+    path: '/activity-manager',
+    component: Layout,
+    name: 'activity-manager',
+    meta: {
+      title: '活动管理',
+      icon: 'GiftOutlined',
+    },
+    redirect: '/activity-manager/add-activity',
+    children: [
+      // 添加活动
+      {
+        path: '/activity-manager/add-activity',
+        component: () =>
+          import('@/views/admin/activity-manager/add-activity/index.vue'),
+        name: 'add-activity',
+        meta: {
+          title: '添加活动',
         },
       },
     ],
