@@ -8,7 +8,13 @@ interface FormItem {
   label: string
   type: string
   placeholder: string
-  value: string | number
+  value: string | number | null
+  options?: SelectOption[]
 }
 
 export type FormItems = FormItem[]
+
+type SelectOption = {
+  label: string
+  value: string | number
+}
