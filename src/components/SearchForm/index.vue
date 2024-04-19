@@ -30,8 +30,8 @@
         <a-space style="float: right">
           <a-button
             type="primary"
-            @click="$emit('search')"
             :loading="searchLoading"
+            @click="$emit('search')"
           >
             查询
           </a-button>
