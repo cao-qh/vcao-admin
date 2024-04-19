@@ -63,7 +63,7 @@ function getScale(w = 1920, h = 1080) {
       }
       .left {
         flex: 1;
-        height: 1038px;
+        height: 1025px;
         display: flex;
         flex-direction: column;
         .tourist {
@@ -74,7 +74,6 @@ function getScale(w = 1920, h = 1080) {
         }
         .age {
           flex: 1;
-          background-color: blue;
         }
       }
       .center {
