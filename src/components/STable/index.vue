@@ -10,8 +10,8 @@
     :scroll="scroll"
     @change="handleTableChange"
   >
-    <template #bodyCell="{ column, row }">
-      <slot name="bodyCell" :column="column" :row="row"></slot>
+    <template #bodyCell="{ column, record }">
+      <slot name="bodyCell" :column="column" :row="record"></slot>
     </template>
   </a-table>
 </template>
