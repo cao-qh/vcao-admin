@@ -46,9 +46,9 @@ const getData = async () => {
   loading.value = true
   const res = await props.data(pagination.current, pagination.pageSize)
   loading.value = false
-  if (res.code == 200) {
-    dataSource.value = res.data.records
-    pagination.total = res.data.total
+  if (res.code == 0) {
+    dataSource.value = res.object.list
+    pagination.total = res.object.totalSize
   }
 }
 
