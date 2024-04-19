@@ -1,7 +1,11 @@
 <template>
   <PageWrapper>
-    <SearchForm :searchLoading="searchLoading" :formItems="formItems" />
-    <STable rowKey="id" :columns="columns" :data="reqData" />
+    <SearchForm
+      :searchLoading="searchLoading"
+      :formItems="formItems"
+      @search="table.refresh()"
+    />
+    <STable ref="table" rowKey="id" :columns="columns" :data="reqData" />
   </PageWrapper>
 </template>
 
@@ -11,6 +15,8 @@ import SearchForm from '@/components/SearchForm/index.vue'
 import type { FormItems } from '@/components/SearchForm/type'
 import STable from '@/components/STable/index.vue'
 import type { Columns } from '@/components/STable/type'
+import { reqAddActivity } from '@/api/admin/activity-manager/add-activity'
+import type { RequestParams } from '@/api/type'
 
 const searchLoading = ref(false)
 const formItems = reactive<FormItems>([
@@ -28,6 +34,7 @@ const formItems = reactive<FormItems>([
   },
 ])
 
+const table = ref()
 const columns: Columns = [
   {
     title: '序号',
@@ -71,8 +78,21 @@ const columns: Columns = [
   },
 ]
 
-const reqData = () => {
-  return []
+const reqData = async (currentPage: number, pageSize: number) => {
+  const data: RequestParams = {
+    currentPage,
+    pageSize,
+  }
+  formItems.forEach((item) => {
+    if (item.value) {
+      data[item.filed] = item.value
+    }
+  })
+  searchLoading.value = true
+  return reqAddActivity(data).then((res) => {
+    searchLoading.value = false
+    return res
+  })
 }
 </script>
 
