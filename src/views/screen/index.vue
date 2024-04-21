@@ -8,8 +8,15 @@
           <Sex class="sex" />
           <Age class="age" />
         </div>
-        <div class="center">中间</div>
-        <div class="right">右侧</div>
+        <div class="center">
+          <Map class="map" />
+          <Line class="line" />
+        </div>
+        <div class="right">
+          <Rank class="rank" />
+          <Year class="year" />
+          <Counter class="count" />
+        </div>
       </div>
     </div>
   </div>
@@ -21,6 +28,13 @@ import Top from './components/Top/index.vue'
 import Tourist from './components/Tourist/index.vue'
 import Sex from './components/Sex/index.vue'
 import Age from './components/Age/index.vue'
+import Map from './components/Map/index.vue'
+import Line from './components/Line/index.vue'
+
+//引入右侧三个子组件
+import Rank from './components/Rank/index.vue'
+import Year from './components/Year/index.vue'
+import Counter from './components/Couter/index.vue'
 
 defineOptions({ name: 'Screen' })
 const screen = ref()
@@ -60,6 +74,21 @@ function getScale(w = 1920, h = 1080) {
       display: flex;
       .right {
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-left: 40px;
+
+        .rank {
+          flex: 1.5;
+        }
+
+        .year {
+          flex: 1;
+        }
+
+        .count {
+          flex: 1;
+        }
       }
       .left {
         flex: 1;
@@ -77,7 +106,17 @@ function getScale(w = 1920, h = 1080) {
         }
       }
       .center {
-        flex: 2;
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+
+        .map {
+          flex: 4;
+        }
+
+        .line {
+          flex: 1;
+        }
       }
     }
   }
