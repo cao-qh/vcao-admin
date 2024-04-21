@@ -3,58 +3,17 @@ import Layout from '@/layout/index.vue'
 
 // 对外暴漏配置路由(常量路由)
 export const constantRoute = [
+  // 登录
   {
-    // 测试
-    path: '/test',
-    component: () => import('@/views/test/index.vue'),
-    name: 'test',
-    meta: {
-      title: '测试',
-      icon: 'ExperimentOutlined',
-    },
-    children: [
-      // 系统管理
-      {
-        path: '/test/system',
-        component: () => import('@/views/test/index.vue'),
-        name: 'system',
-        meta: {
-          title: '系统管理',
-        },
-        children: [
-          // 抖音抓单
-          {
-            path: '/test/system/douyin',
-            component: () => import('@/views/test/index.vue'),
-            name: 'douyin',
-            meta: {
-              title: '抖音抓单',
-            },
-          },
-        ],
-      },
-      // 套餐管理
-      {
-        path: '/test/combo',
-        component: () => import('@/views/test/index.vue'),
-        name: 'combo',
-        meta: {
-          title: '套餐管理',
-        },
-      },
-    ],
-  },
-  {
-    // 登录
     path: '/login',
     component: () => import('@/views/login/index.vue'),
-    name: 'login',
+    name: 'Login',
     meta: {
       title: '登录',
     },
   },
+  // 登录成功以后展示数据的路由
   {
-    // 登录成功以后展示数据的路由
     path: '/',
     component: Layout,
     name: 'layout',
@@ -66,7 +25,7 @@ export const constantRoute = [
       {
         path: '/home',
         component: () => import('@/views/home/index.vue'),
-        name: 'home',
+        name: 'Home',
         meta: {
           title: '首页',
         },
@@ -77,17 +36,30 @@ export const constantRoute = [
   {
     path: '/screen',
     component: () => import('@/views/screen/index.vue'),
-    name: 'screen',
+    name: 'Screen',
     meta: {
       title: '数据大屏',
       icon: 'FundProjectionScreenOutlined',
     },
   },
+  // 404
+  {
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    meta: {
+      title: '404',
+    },
+  },
+]
+
+// 异步路由
+export const asyncRoute = [
   // 权限管理
   {
     path: '/acl',
     component: Layout,
-    name: 'acl',
+    name: 'Acl',
     meta: {
       title: '权限管理',
       icon: 'LockOutlined',
@@ -98,7 +70,7 @@ export const constantRoute = [
       {
         path: '/acl/user',
         component: () => import('@/views/acl/user/index.vue'),
-        name: 'user',
+        name: 'User',
         meta: {
           title: '用户管理',
         },
@@ -107,7 +79,7 @@ export const constantRoute = [
       {
         path: '/acl/role',
         component: () => import('@/views/acl/role/index.vue'),
-        name: 'role',
+        name: 'Role',
         meta: {
           title: '角色管理',
         },
@@ -116,7 +88,7 @@ export const constantRoute = [
       {
         path: '/acl/permission',
         component: () => import('@/views/acl/permission/index.vue'),
-        name: 'permission',
+        name: 'Permission',
         meta: {
           title: '菜单管理',
         },
@@ -127,7 +99,7 @@ export const constantRoute = [
   {
     path: '/product',
     component: Layout,
-    name: 'product',
+    name: 'Product',
     meta: {
       title: '商品管理',
       icon: 'ShoppingOutlined',
@@ -138,7 +110,7 @@ export const constantRoute = [
       {
         path: '/product/tradeMark',
         component: () => import('@/views/product/trademark/index.vue'),
-        name: 'trademark',
+        name: 'Trademark',
         meta: {
           title: '品牌管理',
         },
@@ -147,7 +119,7 @@ export const constantRoute = [
       {
         path: '/product/spu',
         component: () => import('@/views/product/spu/index.vue'),
-        name: 'spu',
+        name: 'Spu',
         meta: {
           title: 'SPU管理',
         },
@@ -156,7 +128,7 @@ export const constantRoute = [
       {
         path: '/product/sku',
         component: () => import('@/views/product/sku/index.vue'),
-        name: 'sku',
+        name: 'Sku',
         meta: {
           title: 'SKU管理',
         },
@@ -165,28 +137,21 @@ export const constantRoute = [
       {
         path: '/product/attr',
         component: () => import('@/views/product/attr/index.vue'),
-        name: 'attr',
+        name: 'Attr',
         meta: {
           title: '属性管理',
         },
       },
     ],
   },
-  {
-    // 404
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
-    meta: {
-      title: '404',
-    },
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/404',
-    name: 'any',
-    meta: {
-      title: '任意路由',
-    },
-  },
 ]
+
+// 任意路由
+export const anyRoute = {
+  path: '/:pathMatch(.*)*',
+  redirect: '/404',
+  name: 'any',
+  meta: {
+    title: '任意路由',
+  },
+}

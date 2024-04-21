@@ -12,7 +12,21 @@ import type { UserState } from './types/type'
 // 引入操作本地存储的工具方法
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由（常量路由）
-import { constantRoute } from '@/router/routes'
+import { constantRoute, asyncRoute, anyRoute } from '@/router/routes'
+import router from '@/router'
+
+// 用于过滤当前用户需要展示的异步路由
+function filterAsyncRoute(asyncRoute: any, routes: string[]) {
+  return asyncRoute.filter((item: any) => {
+    if (routes.includes(item.name)) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoute(item.children, routes)
+      }
+      return true
+    }
+  })
+}
+
 // 创建用户小仓库
 const useUserStore = defineStore('user', {
   // 小仓库存储数据地方
@@ -49,6 +63,16 @@ const useUserStore = defineStore('user', {
       // 如果获取用户信息成功，存储一下用户信息
       if (result.code == 200) {
         this.username = result.data.name
+        // 过滤异步路由
+        const userAsyncRoute = filterAsyncRoute(asyncRoute, result.data.routes)
+        console.log('userAsyncRoute :>> ', userAsyncRoute)
+        console.log('asyncRoute :>> ', asyncRoute)
+        console.log('result.data.routes :>> ', result.data.routes)
+        this.menuRoutes = [...constantRoute, ...userAsyncRoute, anyRoute]
+        //目前路由器管理的只有常量路由:用户计算完毕异步路由、任意路由动态追加
+        ;[...userAsyncRoute, anyRoute].forEach((route: any) => {
+          router.addRoute(route)
+        })
         return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
